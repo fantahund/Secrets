@@ -57,7 +57,7 @@ public final class Secrets extends JavaPlugin {
         PluginManager pM = Bukkit.getPluginManager();
         pM.registerEvents(new PlayerJoinListener(this), this);
         pM.registerEvents(new PlayerLeaveListener(this), this);
-        pM.registerEvents(new SignCreateListener(this), this);
+        pM.registerEvents(new SignCreateListener(this, config), this);
         pM.registerEvents(new PlayerInteractListener(this), this);
         pM.registerEvents(new BlockBreakListener(this), this);
 

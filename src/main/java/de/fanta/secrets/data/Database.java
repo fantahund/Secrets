@@ -18,6 +18,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 
 public class Database {
@@ -30,6 +31,7 @@ public class Database {
     private final String insertSecretQuery;
     private final String insertPlayerSecretQuery;
     private final String updateSecretInventoryItemQuery;
+    private final String updateSecretLocationQuery;
 
     public Database(SQLConfig config, SecretsConfig secretsConfig, Secrets plugin) {
         String url = null;
@@ -62,6 +64,7 @@ public class Database {
         insertSecretQuery = "INSERT INTO " + config.getTablePrefix() + "_secrets" + " (secret, displayitem, server, world, x, y, z) VALUE (?, ?, ?, ?, ?, ?, ?)";
         insertPlayerSecretQuery = "INSERT INTO " + config.getTablePrefix() + "_player" + " (uuid, secret) VALUE (?, ?)";
         updateSecretInventoryItemQuery = "UPDATE " + config.getTablePrefix() + "_secrets" + " SET `displayitem` = ? WHERE `secret` = ?";
+        updateSecretLocationQuery = "UPDATE " + config.getTablePrefix() + "_secrets" + " SET `world` = ?, `x` = ?, `y` = ?, `z` = ?  WHERE `secret` = ?";
     }
 
 
@@ -164,6 +167,21 @@ public class Database {
             smt.setString(2, secretName);
 
             smt.executeUpdate();
+            return null;
+        });
+    }
+
+    public void updateSecretPosition(String secretName, Location loc) throws SQLException {
+        this.connection.runCommands((connection, sqlConnection) -> {
+            PreparedStatement smt = sqlConnection.getOrCreateStatement(updateSecretLocationQuery);
+
+            smt.setString(1,loc.getWorld().getName());
+            smt.setDouble(2,loc.getX());
+            smt.setDouble(3,loc.getY());
+            smt.setDouble(4,loc.getZ());
+            smt.setString(5, secretName);
+            smt.executeUpdate();
+
             return null;
         });
     }
