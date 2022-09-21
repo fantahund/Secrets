@@ -93,7 +93,7 @@ public class Database {
                 long y = rs.getLong(5);
                 long z = rs.getLong(6);
 
-                SecretEntry secretEntry = new SecretEntry(secretName, serverName, worldName, new Location(null, x, y, z));
+                SecretEntry secretEntry = new SecretEntry(secretName, serverName, worldName, new Location(null, x, y, z), null); //TODO try to read Displaystack
                 shopInfos.add(secretEntry);
             }
             return null;

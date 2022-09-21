@@ -115,7 +115,7 @@ public final class Secrets extends JavaPlugin {
             }
         }
         database.insertSecret(secretName, config.getServerName(), location.getWorld().getName(), location);
-        secretEntries.add(new SecretEntry(secretName, config.getServerName(), location.getWorld().getName(), location));
+        secretEntries.add(new SecretEntry(secretName, config.getServerName(), location.getWorld().getName(), location, null));
         return true;
     }
 }
