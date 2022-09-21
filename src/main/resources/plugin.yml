@@ -3,3 +3,5 @@ main: ${mainClass}
 version: ${project.version}
 author: ${project.author}
 api-version: 1.19
+commands:
+  secrets:

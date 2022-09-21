@@ -34,7 +34,7 @@ public class SignCreateListener implements Listener {
                     try {
                         secretCreated = plugin.createSecret(line3, e.getBlock().getLocation());
                     } catch (SQLException ex) {
-                        plugin.getLogger().log(Level.SEVERE, "Secret " + line3 + " could not be created.");
+                        plugin.getLogger().log(Level.SEVERE, "Secret " + line3 + " could not be created.", ex);
                         ChatUtil.sendErrorMessage(player, "Secret " + line3 + " konnte nicht erstellt werden!");
                         return;
                     }

@@ -9,7 +9,7 @@ public class SecretEntry {
     private final String serverName;
     private final String worldName;
     private final Location secretLocation;
-    private final ItemStack displayStack;
+    private ItemStack displayStack;
 
     public SecretEntry(String secretName, String serverName, String worldName, Location secretLocation, @Nullable ItemStack displayStack) {
         this.secretName = secretName;
@@ -33,5 +33,9 @@ public class SecretEntry {
 
     public ItemStack getDisplayStack() {
         return displayStack;
+    }
+
+    public void setDisplayStack(ItemStack itemStack) {
+        this.displayStack = itemStack;
     }
 }

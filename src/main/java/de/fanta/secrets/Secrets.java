@@ -1,22 +1,32 @@
 package de.fanta.secrets;
 
+import de.fanta.secrets.commands.SecretListCommand;
+import de.fanta.secrets.commands.SecretSetDisplayItemCommand;
+import de.fanta.secrets.commands.SecretsLoadfromDatabaseCommand;
 import de.fanta.secrets.data.Database;
 import de.fanta.secrets.data.Permissions;
 import de.fanta.secrets.data.SecretsConfig;
+import de.fanta.secrets.listener.BlockBreakListener;
 import de.fanta.secrets.listener.PlayerInteractListener;
 import de.fanta.secrets.listener.PlayerJoinListener;
 import de.fanta.secrets.listener.SignCreateListener;
 import de.fanta.secrets.utils.ChatUtil;
+import de.fanta.secrets.utils.guiutils.WindowManager;
+import de.iani.cubesideutils.bukkit.commands.CommandRouter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -30,7 +40,7 @@ public final class Secrets extends JavaPlugin {
     private SecretsConfig config;
     private Permissions permissions;
     private NamespacedKey secretSignKey;
-    private List<SecretEntry> secretEntries;
+    private HashMap<String, SecretEntry> secretEntries;
     private HashMap<UUID, List<SecretEntry>> playerSecrets;
 
 
@@ -40,19 +50,24 @@ public final class Secrets extends JavaPlugin {
         this.config = new SecretsConfig(this);
         this.permissions = new Permissions();
         this.secretSignKey = new NamespacedKey(this, "secretSign");
+        new WindowManager(this);
         prefix = ChatUtil.BLUE + "[" + ChatUtil.GREEN + "Secret" + ChatUtil.BLUE + "]";
 
         PluginManager pM = Bukkit.getPluginManager();
         pM.registerEvents(new PlayerJoinListener(this), this);
         pM.registerEvents(new SignCreateListener(this), this);
         pM.registerEvents(new PlayerInteractListener(this), this);
+        pM.registerEvents(new BlockBreakListener(this), this);
+
+        CommandRouter commandRouter = new CommandRouter(getCommand("secrets"));
+        commandRouter.addCommandMapping(new SecretSetDisplayItemCommand(plugin), "setdisplayitem");
+        commandRouter.addCommandMapping(new SecretListCommand(plugin), "list");
+        commandRouter.addCommandMapping(new SecretsLoadfromDatabaseCommand(plugin), "loadfromdatabase");
 
         this.database = new Database(config.getSQLConfig(), config, this);
-        try {
-            this.secretEntries = database.loadSecrets();
-        } catch (SQLException e) {
-            getLogger().log(Level.SEVERE, "Secrets could not be loaded.");
-        }
+
+        loadSecretsfromDatabase();
+
         playerSecrets = new HashMap<>();
     }
 
@@ -81,15 +96,13 @@ public final class Secrets extends JavaPlugin {
         return secretSignKey;
     }
 
-    public List<SecretEntry> getSecretEntries() {
+    public HashMap<String, SecretEntry> getSecretEntries() {
         return secretEntries;
     }
 
     public SecretEntry getSecretEntrybyName(String entryName) {
-        for (SecretEntry secretEntry : secretEntries) {
-            if (secretEntry.getSecretName().equalsIgnoreCase(entryName)) {
-                return secretEntry;
-            }
+        if (secretEntries.containsKey(entryName.toLowerCase())) {
+            return secretEntries.get(entryName.toLowerCase());
         }
         return null;
     }
@@ -109,13 +122,50 @@ public final class Secrets extends JavaPlugin {
     }
 
     public boolean createSecret(String secretName, Location location) throws SQLException {
-        for (SecretEntry secretEntry : secretEntries) {
-            if (secretEntry.getSecretName().equalsIgnoreCase(secretName)) {
-                return false;
-            }
+        if (secretEntries.containsKey(secretName.toLowerCase())) {
+            return false;
         }
-        database.insertSecret(secretName, config.getServerName(), location.getWorld().getName(), location);
-        secretEntries.add(new SecretEntry(secretName, config.getServerName(), location.getWorld().getName(), location, null));
+
+        ItemStack itemStack = new ItemStack(Material.STONE);
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        itemMeta.setDisplayName(ChatUtil.GREEN + secretName);
+        itemStack.setItemMeta(itemMeta);
+
+        database.insertSecret(secretName, config.getServerName(), location.getWorld().getName(), location, itemStack);
+
+        secretEntries.put(secretName.toLowerCase(), new SecretEntry(secretName, config.getServerName(), location.getWorld().getName(), location, itemStack));
         return true;
+    }
+
+    public SecretEntry getSecretEntrybySign(Sign sign) {
+        if (!sign.getPersistentDataContainer().has(plugin.getSecretSignKey())) {
+            return null;
+        }
+
+        String secretName = sign.getPersistentDataContainer().get(plugin.getSecretSignKey(), PersistentDataType.STRING);
+        return plugin.getSecretEntrybyName(secretName);
+    }
+
+    public void loadSecretsfromDatabase() {
+        if (secretEntries != null && !secretEntries.isEmpty()) {
+            secretEntries.clear();
+        }
+        try {
+            this.secretEntries = database.loadSecrets();
+        } catch (SQLException ex) {
+            getLogger().log(Level.SEVERE, "Secrets could not be loaded.", ex);
+        }
+
+        List<SecretEntry> secretEntries;
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            try {
+                secretEntries = plugin.getDatabase().loadSecretsbyPlayer(player);
+            } catch (SQLException ex) {
+                secretEntries = new ArrayList<>();
+                plugin.getLogger().log(Level.SEVERE, "Secrets for player " + player + " could not be loaded.", ex);
+            }
+
+            plugin.addPlayerSecrets(player, secretEntries);
+        }
     }
 }
