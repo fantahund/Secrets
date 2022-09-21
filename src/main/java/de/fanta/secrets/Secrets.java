@@ -9,6 +9,7 @@ import de.fanta.secrets.data.SecretsConfig;
 import de.fanta.secrets.listener.BlockBreakListener;
 import de.fanta.secrets.listener.PlayerInteractListener;
 import de.fanta.secrets.listener.PlayerJoinListener;
+import de.fanta.secrets.listener.PlayerLeaveListener;
 import de.fanta.secrets.listener.SignCreateListener;
 import de.fanta.secrets.utils.ChatUtil;
 import de.fanta.secrets.utils.guiutils.WindowManager;
@@ -55,6 +56,7 @@ public final class Secrets extends JavaPlugin {
 
         PluginManager pM = Bukkit.getPluginManager();
         pM.registerEvents(new PlayerJoinListener(this), this);
+        pM.registerEvents(new PlayerLeaveListener(this), this);
         pM.registerEvents(new SignCreateListener(this), this);
         pM.registerEvents(new PlayerInteractListener(this), this);
         pM.registerEvents(new BlockBreakListener(this), this);
@@ -109,6 +111,10 @@ public final class Secrets extends JavaPlugin {
 
     public List<SecretEntry> getPlayerSecrets(Player player) {
         return playerSecrets.get(player.getUniqueId());
+    }
+
+    public void removePlayerSecrets(Player player) {
+        playerSecrets.remove(player.getUniqueId());
     }
 
     public void addPlayerSecrets(Player player, List<SecretEntry> Secrets) {
