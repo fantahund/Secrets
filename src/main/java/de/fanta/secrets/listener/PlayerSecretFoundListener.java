@@ -5,6 +5,7 @@ import de.fanta.secrets.Secrets;
 import de.fanta.secrets.api.PlayerFoundSecretEvent;
 import de.fanta.secrets.utils.ChatUtil;
 import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,7 +31,7 @@ public class PlayerSecretFoundListener implements Listener {
                 plugin.getDatabase().insertPlayerSecret(player, secretEntry.getSecretName());
                 ChatUtil.sendNormalMessage(player, "Du hast das Secret " + ChatUtil.BLUE + secretEntry.getSecretName() + ChatUtil.GREEN + " gefunden!");
                 ChatUtil.sendTitleToPlayer(player, secretEntry.getSecretName(), ChatUtil.GREEN + "Du hast ein Secret gefunden!", ChatUtil.GREEN, 10, 60, 10, false);
-                player.getWorld().playSound(player, Sound.UI_TOAST_CHALLENGE_COMPLETE, 0.8f, 1);
+                player.getWorld().playSound(player, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1, 1);
             } catch (SQLException ex) {
                 plugin.getLogger().log(Level.SEVERE, "Secrets " + secretEntry.getSecretName() + " could not be saved for player " + player.getName() + ".", ex);
             }
