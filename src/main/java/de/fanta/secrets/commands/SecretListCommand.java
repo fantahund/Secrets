@@ -28,11 +28,7 @@ public class SecretListCommand extends SubCommand {
         }
 
         List<SecretEntry> secretEntries = plugin.getPlayerSecrets(player);
-        if (!secretEntries.isEmpty()) {
-            new SecretsFoungGui(secretEntries, player, plugin).open();
-        } else {
-            ChatUtil.sendErrorMessage(player, "Du hast noch keine Secrets gefunden.");
-        }
+        new SecretsFoungGui(secretEntries, player, plugin).open();
 
         return true;
     }

@@ -1,14 +1,9 @@
 package de.fanta.secrets.data;
 
-import com.google.common.base.Charsets;
 import de.fanta.secrets.Secrets;
 import de.iani.cubesideutils.bukkit.sql.SQLConfigBukkit;
 import de.iani.cubesideutils.sql.SQLConfig;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-
-import java.io.InputStream;
-import java.io.InputStreamReader;
 
 public class SecretsConfig {
     private final Secrets plugin;

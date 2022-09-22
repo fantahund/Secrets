@@ -23,7 +23,7 @@ public class SecretDeletePlayerSecretsCommand extends SubCommand {
     public boolean onCommand(CommandSender sender, Command command, String alias, String commandString, ArgsParser args) {
 
         if (args.hasNext()) {
-            String secretName = args.getNext();
+            String secretName = args.getAll("");
                 try {
                     plugin.getDatabase().deletePlayerSecret(secretName);
                 } catch (SQLException ex) {

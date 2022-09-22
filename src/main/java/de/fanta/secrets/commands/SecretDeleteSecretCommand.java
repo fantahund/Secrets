@@ -3,7 +3,6 @@ package de.fanta.secrets.commands;
 import de.fanta.secrets.SecretEntry;
 import de.fanta.secrets.Secrets;
 import de.fanta.secrets.utils.ChatUtil;
-import de.fanta.secrets.utils.ItemStackUtil;
 import de.iani.cubesideutils.bukkit.commands.SubCommand;
 import de.iani.cubesideutils.commands.ArgsParser;
 import org.bukkit.Bukkit;
@@ -13,7 +12,6 @@ import org.bukkit.entity.Player;
 
 import java.sql.SQLException;
 import java.util.Collection;
-import java.util.List;
 import java.util.logging.Level;
 
 public class SecretDeleteSecretCommand extends SubCommand {
@@ -28,7 +26,7 @@ public class SecretDeleteSecretCommand extends SubCommand {
     public boolean onCommand(CommandSender sender, Command command, String alias, String commandString, ArgsParser args) {
 
         if (args.hasNext()) {
-            String secretName = args.getNext();
+            String secretName = args.getAll("");
             SecretEntry secretEntry = plugin.getSecretEntrybyName(secretName);
             if (secretEntry != null) {
                 try {

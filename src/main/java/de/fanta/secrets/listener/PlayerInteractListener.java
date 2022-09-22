@@ -13,9 +13,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.persistence.PersistentDataType;
 
-import java.sql.SQLException;
-import java.util.logging.Level;
-
 public class PlayerInteractListener implements Listener {
 
     private final Secrets plugin;
@@ -43,20 +40,5 @@ public class PlayerInteractListener implements Listener {
         }
     }
 
-    @EventHandler
-    public void onSecretFound(PlayerFoundSecretEvent e) {
-        Player player = e.getPlayer();
-        SecretEntry secretEntry = e.getSecretEntry();
-        if (!e.hasPlayerFoundSecret()) {
-            try {
-                plugin.addPlayerSecret(player, secretEntry);
-                plugin.getDatabase().insertPlayerSecret(player, secretEntry.getSecretName());
-                ChatUtil.sendNormalMessage(player, "Du hast das Secret " + ChatUtil.BLUE + secretEntry.getSecretName() + ChatUtil.GREEN + " gefunden!");
-            } catch (SQLException ex) {
-                plugin.getLogger().log(Level.SEVERE, "Secrets " + secretEntry.getSecretName() + " could not be saved for player " + player.getName() + ".", ex);
-            }
-        } else {
-            ChatUtil.sendNormalMessage(player, "Du hast das Secret " + ChatUtil.BLUE + secretEntry.getSecretName() + ChatUtil.GREEN + " bereits gefunden!");
-        }
-    }
+
 }

@@ -40,7 +40,9 @@ public class LobbyItemListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
-        e.getPlayer().getInventory().setItem(config.getSecretItemSlot(), secretItem);
+        if (e.getPlayer().hasPermission(plugin.getPermissions().getSecretListPermission())) {
+            e.getPlayer().getInventory().setItem(config.getSecretItemSlot(), secretItem);
+        }
     }
 
     @EventHandler
@@ -96,7 +98,9 @@ public class LobbyItemListener implements Listener {
             if (stack != null) {
                 ItemMeta meta = stack.getItemMeta();
                 if (meta != null && meta.getPersistentDataContainer().has(namespacedKey)) {
-                    new SecretsFoungGui(plugin.getPlayerSecrets(e.getPlayer()), e.getPlayer(), plugin).open();
+                    if (e.getPlayer().hasPermission(plugin.getPermissions().getSecretListPermission())) {
+                        new SecretsFoungGui(plugin.getPlayerSecrets(e.getPlayer()), e.getPlayer(), plugin).open();
+                    }
                 }
             }
         }
