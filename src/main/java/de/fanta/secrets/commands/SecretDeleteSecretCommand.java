@@ -45,6 +45,7 @@ public class SecretDeleteSecretCommand extends SubCommand {
 
                 plugin.removeSecrets(secretEntry);
                 plugin.setUpdateTime();
+                plugin.loadSecretsfromDatabase();
                 ChatUtil.sendNormalMessage(sender, "Du hast das Secret " + ChatUtil.BLUE + secretEntry.getSecretName() + ChatUtil.GREEN + " erfolgreich gelöscht.");
             } else {
                 ChatUtil.sendErrorMessage(sender, "Das Secret " + secretName + " existiert nicht.");

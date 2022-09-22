@@ -31,6 +31,8 @@ public class SecretDeletePlayerSecretsCommand extends SubCommand {
                     ChatUtil.sendErrorMessage(sender, "Fehler beim löschen von Spieler Secrets " + ChatUtil.BLUE + secretName);
                     return true;
                 }
+                plugin.setUpdateTime();
+                plugin.loadSecretsfromDatabase();
                 ChatUtil.sendNormalMessage(sender, "Du hast das Secret " + ChatUtil.BLUE + secretName + ChatUtil.GREEN + " von allen Spielern erfolgreich gelöscht.");
         } else {
             ChatUtil.sendErrorMessage(sender, "/secrets deleteplayersecrets <secret>.");

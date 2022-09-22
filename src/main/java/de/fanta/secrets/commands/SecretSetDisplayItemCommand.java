@@ -43,6 +43,7 @@ public class SecretSetDisplayItemCommand extends SubCommand {
                         plugin.getLogger().log(Level.SEVERE, "Display item for Secret " + secretEntry.getSecretName() + " could not be set.", ex);
                     }
                     ChatUtil.sendNormalMessage(player, "Du hast das DisplayItem für Secret " + ChatUtil.BLUE + secretEntry.getSecretName() + ChatUtil.GREEN + " erfolgreich gesetzt.");
+                    plugin.setUpdateTime();
                 } else {
                     ChatUtil.sendErrorMessage(player, "Das Secret " + secretName + " existiert nicht.");
                 }
