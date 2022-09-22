@@ -1,5 +1,7 @@
 package de.fanta.secrets;
 
+import de.fanta.secrets.commands.SecretDeletePlayerSecretsCommand;
+import de.fanta.secrets.commands.SecretDeleteSecretCommand;
 import de.fanta.secrets.commands.SecretListCommand;
 import de.fanta.secrets.commands.SecretSetDisplayItemCommand;
 import de.fanta.secrets.commands.SecretsLoadfromDatabaseCommand;
@@ -43,6 +45,7 @@ public final class Secrets extends JavaPlugin {
     private NamespacedKey secretSignKey;
     private HashMap<String, SecretEntry> secretEntries;
     private HashMap<UUID, List<SecretEntry>> playerSecrets;
+    private long lastUpdateTime;
 
 
     @Override
@@ -62,11 +65,21 @@ public final class Secrets extends JavaPlugin {
         pM.registerEvents(new BlockBreakListener(this), this);
 
         CommandRouter commandRouter = new CommandRouter(getCommand("secrets"));
+        commandRouter.addCommandMapping(new SecretListCommand(plugin));
         commandRouter.addCommandMapping(new SecretSetDisplayItemCommand(plugin), "setdisplayitem");
-        commandRouter.addCommandMapping(new SecretListCommand(plugin), "list");
         commandRouter.addCommandMapping(new SecretsLoadfromDatabaseCommand(plugin), "loadfromdatabase");
+        commandRouter.addCommandMapping(new SecretDeleteSecretCommand(plugin), "deletesecret");
+        commandRouter.addCommandMapping(new SecretDeletePlayerSecretsCommand(plugin), "deleteplayersecrets");
 
         this.database = new Database(config.getSQLConfig(), config, this);
+
+        try {
+            this.lastUpdateTime = database.getLastUpdateTime();
+        } catch (SQLException ex) {
+            getLogger().log(Level.SEVERE, "Update Time could not be obtained.", ex);
+        }
+
+        startUpdateTimer();
 
         loadSecretsfromDatabase();
 
@@ -117,6 +130,10 @@ public final class Secrets extends JavaPlugin {
         playerSecrets.remove(player.getUniqueId());
     }
 
+    public void removeSecrets(SecretEntry secretEntry) {
+        secretEntries.remove(secretEntry.getSecretName());
+    }
+
     public void addPlayerSecrets(Player player, List<SecretEntry> Secrets) {
         playerSecrets.put(player.getUniqueId(), Secrets);
     }
@@ -137,10 +154,23 @@ public final class Secrets extends JavaPlugin {
         itemMeta.setDisplayName(ChatUtil.GREEN + secretName);
         itemStack.setItemMeta(itemMeta);
 
+        updateCheck();
         database.insertSecret(secretName, config.getServerName(), location.getWorld().getName(), location, itemStack);
-
         secretEntries.put(secretName.toLowerCase(), new SecretEntry(secretName, config.getServerName(), location.getWorld().getName(), location, itemStack));
+
+        setUpdateTime();
+
         return true;
+    }
+
+    public void setUpdateTime() {
+        long updateTime = System.currentTimeMillis();
+        try {
+            database.updateUpdateTime(updateTime);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        this.lastUpdateTime = updateTime;
     }
 
     public SecretEntry getSecretEntrybySign(Sign sign) {
@@ -173,5 +203,24 @@ public final class Secrets extends JavaPlugin {
 
             plugin.addPlayerSecrets(player, secretEntries);
         }
+    }
+
+    private void startUpdateTimer() {
+        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this::updateCheck, 60 * 20 * 5, 60 * 20 * 5);
+    }
+
+    public void updateCheck() {
+        long lastUpdate;
+        try {
+            lastUpdate = database.getLastUpdateTime();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (lastUpdate > lastUpdateTime) {
+            loadSecretsfromDatabase();
+        }
+
+        this.lastUpdateTime = lastUpdate;
     }
 }

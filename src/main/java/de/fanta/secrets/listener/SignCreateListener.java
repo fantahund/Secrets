@@ -61,7 +61,7 @@ public class SignCreateListener implements Listener {
                             SecretEntry secretEntry = plugin.getSecretEntrybyName(line3.toLowerCase());
                             if (secretEntry != null) {
                                 if (secretEntry.getServerName().equalsIgnoreCase(config.getServerName())) {
-                                    Location oldSecretLocation = secretEntry.getSecretLocation();
+                                    Location oldSecretLocation = new Location(Bukkit.getWorld(secretEntry.getWorldName()), secretEntry.getSecretLocation().getX(), secretEntry.getSecretLocation().getY(), secretEntry.getSecretLocation().getZ());
 
                                     e.setLine(0, plugin.getPrefix());
                                     e.setLine(2, ChatUtil.PINK + line3);

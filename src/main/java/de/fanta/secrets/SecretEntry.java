@@ -41,4 +41,8 @@ public class SecretEntry {
     public void setLocation(Location location) {
         this.secretLocation = location;
     }
+
+    public String getWorldName() {
+        return worldName;
+    }
 }

@@ -18,8 +18,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
-import java.util.logging.Level;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Database {
 
@@ -32,6 +31,10 @@ public class Database {
     private final String insertPlayerSecretQuery;
     private final String updateSecretInventoryItemQuery;
     private final String updateSecretLocationQuery;
+    private final String getLastUpdateQuery;
+    private final String updateLastUpdateQuery;
+    private final String deleteSecretQuery;
+    private final String deletePlayerSecretsQuery;
 
     public Database(SQLConfig config, SecretsConfig secretsConfig, Secrets plugin) {
         String url = null;
@@ -65,6 +68,10 @@ public class Database {
         insertPlayerSecretQuery = "INSERT INTO " + config.getTablePrefix() + "_player" + " (uuid, secret) VALUE (?, ?)";
         updateSecretInventoryItemQuery = "UPDATE " + config.getTablePrefix() + "_secrets" + " SET `displayitem` = ? WHERE `secret` = ?";
         updateSecretLocationQuery = "UPDATE " + config.getTablePrefix() + "_secrets" + " SET `world` = ?, `x` = ?, `y` = ?, `z` = ?  WHERE `secret` = ?";
+        getLastUpdateQuery = "SELECT `lastupdatetime` FROM " + config.getTablePrefix() + "_update";
+        updateLastUpdateQuery = "UPDATE " + config.getTablePrefix() + "_update" + " SET `lastupdatetime` = ?";
+        deleteSecretQuery = "DELETE FROM " + config.getTablePrefix() + "_secrets" + " WHERE `secret` = ?";
+        deletePlayerSecretsQuery = "DELETE FROM " + config.getTablePrefix() + "_player" + " WHERE `secret` = ?";
     }
 
 
@@ -86,7 +93,19 @@ public class Database {
                     "`z` BIGINT," +
                     "PRIMARY KEY (`secret`)" +
                     ")");
+            smt.executeUpdate("CREATE TABLE IF NOT EXISTS " + config.getTablePrefix() + "_update" + " (" +
+                    "`lastupdatetime` BIGINT," +
+                    "PRIMARY KEY (`lastupdatetime`)" +
+                    ")");
             smt.close();
+
+            PreparedStatement getUpdateStatement = sqlConnection.getOrCreateStatement("SELECT `lastupdatetime` FROM " + config.getTablePrefix() + "_update");
+            ResultSet rs = getUpdateStatement.executeQuery();
+            if (!rs.next()) {
+                PreparedStatement setUpdateStatement = sqlConnection.getOrCreateStatement("INSERT INTO " + config.getTablePrefix() + "_update" + " (lastupdatetime) VALUE (?)");
+                setUpdateStatement.setLong(1, System.currentTimeMillis());
+                setUpdateStatement.executeUpdate();
+            }
             return null;
         });
     }
@@ -175,11 +194,56 @@ public class Database {
         this.connection.runCommands((connection, sqlConnection) -> {
             PreparedStatement smt = sqlConnection.getOrCreateStatement(updateSecretLocationQuery);
 
-            smt.setString(1,loc.getWorld().getName());
-            smt.setDouble(2,loc.getX());
-            smt.setDouble(3,loc.getY());
-            smt.setDouble(4,loc.getZ());
+            smt.setString(1, loc.getWorld().getName());
+            smt.setDouble(2, loc.getX());
+            smt.setDouble(3, loc.getY());
+            smt.setDouble(4, loc.getZ());
             smt.setString(5, secretName);
+            smt.executeUpdate();
+
+            return null;
+        });
+    }
+
+    public long getLastUpdateTime() throws SQLException {
+        AtomicLong lastUpdateTime = new AtomicLong();
+        this.connection.runCommands((connection, sqlConnection) -> {
+            PreparedStatement statement = sqlConnection.getOrCreateStatement(getLastUpdateQuery);
+            ResultSet rs = statement.executeQuery();
+            rs.next();
+            lastUpdateTime.set(rs.getLong(1));
+            return null;
+        });
+        return lastUpdateTime.get();
+    }
+
+    public void updateUpdateTime(long currentTime) throws SQLException {
+        this.connection.runCommands((connection, sqlConnection) -> {
+            PreparedStatement smt = sqlConnection.getOrCreateStatement(updateLastUpdateQuery);
+
+            smt.setLong(1, currentTime);
+            smt.executeUpdate();
+
+            return null;
+        });
+    }
+
+    public void deleteSecret(String secretName) throws SQLException {
+        this.connection.runCommands((connection, sqlConnection) -> {
+            PreparedStatement smt = sqlConnection.getOrCreateStatement(deleteSecretQuery);
+
+            smt.setString(1, secretName);
+            smt.executeUpdate();
+
+            return null;
+        });
+    }
+
+    public void deletePlayerSecret(String secretName) throws SQLException {
+        this.connection.runCommands((connection, sqlConnection) -> {
+            PreparedStatement smt = sqlConnection.getOrCreateStatement(deletePlayerSecretsQuery);
+
+            smt.setString(1, secretName);
             smt.executeUpdate();
 
             return null;

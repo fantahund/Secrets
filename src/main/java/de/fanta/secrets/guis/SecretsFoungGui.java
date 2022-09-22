@@ -33,7 +33,7 @@ public class SecretsFoungGui extends AbstractWindow {
     private static final HashMap<UUID, List<SecretEntry>> secretsListByPlayer = new HashMap<>();
     private final int numOfItemRows;
     private int scrollAmount;
-    private Secrets plugin;
+    private final Secrets plugin;
 
     public SecretsFoungGui(List<SecretEntry> secretList, Player player, Secrets plugin) {
         super(player, Bukkit.createInventory(player, WINDOW_SIZE, ChatUtil.GREEN + "Secrets"));
@@ -79,8 +79,8 @@ public class SecretsFoungGui extends AbstractWindow {
             }
         }
 
-        content[CLOSE_INDEX] = CustomHeads.RAINBOW_X.getHead(ChatUtil.GREEN + "Zurück");
-        content[SECRET_SCORE_INDEX] = GUIUtils.createGuiItem(Material.EMERALD, "" + ChatUtil.BLUE + secrets.size() + ChatUtil.GREEN + "/" + ChatUtil.BLUE + plugin.getSecretEntries().size(), ChatUtil.GREEN + "Anzahl gefundener Secrets");
+        content[CLOSE_INDEX] = CustomHeads.RAINBOW_X.getHead(ChatUtil.GREEN + "Menü schlißen");
+        content[SECRET_SCORE_INDEX] = GUIUtils.createGuiItem(Material.EMERALD, ChatUtil.GREEN + "Anzahl gefundener Secrets", "" + ChatUtil.BLUE + secrets.size() + ChatUtil.GREEN + "/" + ChatUtil.BLUE + plugin.getSecretEntries().size());
         getInventory().setContents(content);
     }
 
