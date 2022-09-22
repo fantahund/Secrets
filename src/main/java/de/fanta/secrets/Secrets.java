@@ -6,6 +6,7 @@ import de.fanta.secrets.commands.SecretListCommand;
 import de.fanta.secrets.commands.SecretSetDisplayItemCommand;
 import de.fanta.secrets.commands.SecretsLoadfromDatabaseCommand;
 import de.fanta.secrets.data.Database;
+import de.fanta.secrets.data.LobbyItemListener;
 import de.fanta.secrets.data.Permissions;
 import de.fanta.secrets.data.SecretsConfig;
 import de.fanta.secrets.listener.BlockBreakListener;
@@ -21,6 +22,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Sign;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -63,6 +65,7 @@ public final class Secrets extends JavaPlugin {
         pM.registerEvents(new SignCreateListener(this, config), this);
         pM.registerEvents(new PlayerInteractListener(this), this);
         pM.registerEvents(new BlockBreakListener(this), this);
+        pM.registerEvents(new LobbyItemListener(this, config), this);
 
         CommandRouter commandRouter = new CommandRouter(getCommand("secrets"));
         commandRouter.addCommandMapping(new SecretListCommand(plugin));

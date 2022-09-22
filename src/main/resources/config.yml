@@ -7,3 +7,8 @@ database:
   database: CHANGETHIS
   tableprefix: secrets
   servername: CHANGETHIS
+lobbyitem:
+  #Give Player Secret Item by Join
+  use: true
+  #Lobby Item Slot (0-8)
+  slot: 0

@@ -1,15 +1,22 @@
 package de.fanta.secrets.data;
 
+import com.google.common.base.Charsets;
 import de.fanta.secrets.Secrets;
 import de.iani.cubesideutils.bukkit.sql.SQLConfigBukkit;
 import de.iani.cubesideutils.sql.SQLConfig;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class SecretsConfig {
     private final Secrets plugin;
     private SQLConfig sqlConfig;
     private boolean useMysqlDatabase;
     private String serverName;
+    private int secretItemUse;
+    private int secretItemSlot;
 
     public SecretsConfig(Secrets plugin) {
         this.plugin = plugin;
@@ -23,6 +30,8 @@ public class SecretsConfig {
         sqlConfig = new SQLConfigBukkit(config.getConfigurationSection("database"));
         useMysqlDatabase = config.getBoolean("database.usemysql");
         serverName = config.getString("database.servername");
+        secretItemUse = config.getInt("lobbyitem.use");
+        secretItemSlot = config.getInt("lobbyitem.slot");
     }
 
     public SQLConfig getSQLConfig() {
@@ -35,5 +44,13 @@ public class SecretsConfig {
 
     public String getServerName() {
         return serverName;
+    }
+
+    public int getSecretItemUse() {
+        return secretItemUse;
+    }
+
+    public int getSecretItemSlot() {
+        return secretItemSlot;
     }
 }
