@@ -1,6 +1,7 @@
-package de.fanta.secrets.data;
+package de.fanta.secrets.listener;
 
 import de.fanta.secrets.Secrets;
+import de.fanta.secrets.data.SecretsConfig;
 import de.fanta.secrets.guis.SecretsFoungGui;
 import de.fanta.secrets.utils.ChatUtil;
 import org.bukkit.GameMode;
@@ -11,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -40,8 +42,25 @@ public class LobbyItemListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
-        if (e.getPlayer().hasPermission(plugin.getPermissions().getSecretListPermission())) {
+        if (e.getPlayer().hasPermission(plugin.getPermissions().getSecretListPermission()) && config.getSecretItemWorlds().contains(e.getPlayer().getWorld().getName())) {
             e.getPlayer().getInventory().setItem(config.getSecretItemSlot(), secretItem);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerChangeWorld(PlayerChangedWorldEvent e) {
+        if (e.getPlayer().hasPermission(plugin.getPermissions().getSecretListPermission())) {
+            if (config.getSecretItemWorlds().contains(e.getPlayer().getWorld().getName())) {
+                e.getPlayer().getInventory().setItem(config.getSecretItemSlot(), secretItem);
+            } else {
+                ItemStack[] itemStacks = e.getPlayer().getInventory().getContents();
+                for (int i = 0; i < itemStacks.length; i++) {
+                    ItemStack stack = itemStacks[i];
+                    if (stack != null && stack.getItemMeta().getPersistentDataContainer().has(namespacedKey)) {
+                        e.getPlayer().getInventory().setItem(i, null);
+                    }
+                }
+            }
         }
     }
 

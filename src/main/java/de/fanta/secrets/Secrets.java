@@ -6,7 +6,7 @@ import de.fanta.secrets.commands.SecretListCommand;
 import de.fanta.secrets.commands.SecretSetDisplayItemCommand;
 import de.fanta.secrets.commands.SecretsLoadfromDatabaseCommand;
 import de.fanta.secrets.data.Database;
-import de.fanta.secrets.data.LobbyItemListener;
+import de.fanta.secrets.listener.LobbyItemListener;
 import de.fanta.secrets.data.Permissions;
 import de.fanta.secrets.data.SecretsConfig;
 import de.fanta.secrets.listener.BlockBreakListener;

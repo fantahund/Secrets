@@ -5,6 +5,8 @@ import de.iani.cubesideutils.bukkit.sql.SQLConfigBukkit;
 import de.iani.cubesideutils.sql.SQLConfig;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.List;
+
 public class SecretsConfig {
     private final Secrets plugin;
     private SQLConfig sqlConfig;
@@ -12,6 +14,7 @@ public class SecretsConfig {
     private String serverName;
     private int secretItemUse;
     private int secretItemSlot;
+    private List<String> secretItemWorlds;
 
     public SecretsConfig(Secrets plugin) {
         this.plugin = plugin;
@@ -20,13 +23,16 @@ public class SecretsConfig {
     }
 
     public void reloadConfig() {
-        plugin.reloadConfig();
         FileConfiguration config = plugin.getConfig();
+        config.options().copyDefaults(true);
+        plugin.saveConfig();
+
         sqlConfig = new SQLConfigBukkit(config.getConfigurationSection("database"));
         useMysqlDatabase = config.getBoolean("database.usemysql");
         serverName = config.getString("database.servername");
         secretItemUse = config.getInt("lobbyitem.use");
         secretItemSlot = config.getInt("lobbyitem.slot");
+        secretItemWorlds = config.getStringList("lobbyitem.worlds");
     }
 
     public SQLConfig getSQLConfig() {
@@ -47,5 +53,9 @@ public class SecretsConfig {
 
     public int getSecretItemSlot() {
         return secretItemSlot;
+    }
+
+    public List<String> getSecretItemWorlds() {
+        return secretItemWorlds;
     }
 }
