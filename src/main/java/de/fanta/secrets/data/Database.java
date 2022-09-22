@@ -77,6 +77,13 @@ public class Database {
 
     private void createTablesIfNotExist() throws SQLException {
         this.connection.runCommands((connection, sqlConnection) -> {
+            PreparedStatement checkTableStatment = sqlConnection.getOrCreateStatement("SHOW TABLES LIKE \"secrets_secrets\"");
+            ResultSet checkrs = checkTableStatment.executeQuery();
+            if (checkrs.next()) {
+                return null;
+            }
+
+
             Statement smt = connection.createStatement();
             smt.executeUpdate("CREATE TABLE IF NOT EXISTS " + config.getTablePrefix() + "_player" + " (" +
                     "`uuid` char(36)," +
