@@ -36,26 +36,12 @@ public class Database {
     private final String deleteSecretQuery;
     private final String deletePlayerSecretsQuery;
 
-    public Database(SQLConfig config, SecretsConfig secretsConfig, Secrets plugin) {
-        String url = null;
+    public Database(SQLConfig config, Secrets plugin) {
         this.config = config;
         this.plugin = plugin;
 
         try {
-            if (!secretsConfig.useMysqlDatabase()) {
-                Class.forName("org.h2.Driver");
-                url = "jdbc:h2:./" + config.getDatabase();
-            }
-        } catch (ClassNotFoundException ex) {
-            throw new IllegalStateException("Cannot find the driver in the classpath!", ex);
-        }
-
-        try {
-            if (url == null) {
-                this.connection = new MySQLConnection(config.getHost(), config.getDatabase(), config.getUser(), config.getPassword());
-            } else {
-                this.connection = new MySQLConnection(url, null, null, null);
-            }
+            this.connection = new MySQLConnection(config.getHost(), config.getDatabase(), config.getUser(), config.getPassword());
 
             createTablesIfNotExist();
         } catch (SQLException ex) {
@@ -77,14 +63,13 @@ public class Database {
 
     private void createTablesIfNotExist() throws SQLException {
         this.connection.runCommands((connection, sqlConnection) -> {
+            Statement smt = connection.createStatement();
             PreparedStatement checkTableStatment = sqlConnection.getOrCreateStatement("SHOW TABLES LIKE \"secrets_secrets\"");
             ResultSet checkrs = checkTableStatment.executeQuery();
             if (checkrs.next()) {
                 return null;
             }
 
-
-            Statement smt = connection.createStatement();
             smt.executeUpdate("CREATE TABLE IF NOT EXISTS " + config.getTablePrefix() + "_player" + " (" +
                     "`uuid` char(36)," +
                     "`secret` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin," +
@@ -104,7 +89,6 @@ public class Database {
                     "`lastupdatetime` BIGINT," +
                     "PRIMARY KEY (`lastupdatetime`)" +
                     ")");
-            smt.close();
 
             PreparedStatement getUpdateStatement = sqlConnection.getOrCreateStatement("SELECT `lastupdatetime` FROM " + config.getTablePrefix() + "_update");
             ResultSet rs = getUpdateStatement.executeQuery();
@@ -113,6 +97,7 @@ public class Database {
                 setUpdateStatement.setLong(1, System.currentTimeMillis());
                 setUpdateStatement.executeUpdate();
             }
+            smt.close();
             return null;
         });
     }

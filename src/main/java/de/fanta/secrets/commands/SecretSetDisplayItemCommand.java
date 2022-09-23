@@ -33,7 +33,7 @@ public class SecretSetDisplayItemCommand extends SubCommand {
         if (args.hasNext()) {
             ItemStack displayItem = player.getInventory().getItemInMainHand();
             if (displayItem.getType() != Material.AIR) {
-                String secretName = args.getNext();
+                String secretName = args.getAll("");
                 SecretEntry secretEntry = plugin.getSecretEntrybyName(secretName);
                 if (secretEntry != null) {
                     secretEntry.setDisplayStack(displayItem);

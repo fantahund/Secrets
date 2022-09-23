@@ -6,10 +6,10 @@ import de.fanta.secrets.commands.SecretListCommand;
 import de.fanta.secrets.commands.SecretSetDisplayItemCommand;
 import de.fanta.secrets.commands.SecretsLoadfromDatabaseCommand;
 import de.fanta.secrets.data.Database;
-import de.fanta.secrets.listener.LobbyItemListener;
 import de.fanta.secrets.data.Permissions;
 import de.fanta.secrets.data.SecretsConfig;
 import de.fanta.secrets.listener.BlockBreakListener;
+import de.fanta.secrets.listener.LobbyItemListener;
 import de.fanta.secrets.listener.PlayerInteractListener;
 import de.fanta.secrets.listener.PlayerJoinListener;
 import de.fanta.secrets.listener.PlayerLeaveListener;
@@ -26,6 +26,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -48,7 +49,7 @@ public final class Secrets extends JavaPlugin {
     private HashMap<String, SecretEntry> secretEntries;
     private HashMap<UUID, List<SecretEntry>> playerSecrets;
     private long lastUpdateTime;
-
+    private boolean isPaperServer;
 
     @Override
     public void onEnable() {
@@ -75,12 +76,21 @@ public final class Secrets extends JavaPlugin {
         commandRouter.addCommandMapping(new SecretDeleteSecretCommand(plugin), "deletesecret");
         commandRouter.addCommandMapping(new SecretDeletePlayerSecretsCommand(plugin), "deleteplayersecrets");
 
-        this.database = new Database(config.getSQLConfig(), config, this);
+        this.database = new Database(config.getSQLConfig(), this);
+
 
         try {
             this.lastUpdateTime = database.getLastUpdateTime();
         } catch (SQLException ex) {
             getLogger().log(Level.SEVERE, "Update Time could not be obtained.", ex);
+        }
+
+        try {
+            SkullMeta.class.getDeclaredMethod("getPlayerProfile");
+            isPaperServer = true;
+        } catch (Exception e) {
+            getLogger().log(Level.INFO, "Server version spigot. We recommend to use Paper.");
+            isPaperServer = false;
         }
 
         startUpdateTimer();
@@ -178,7 +188,7 @@ public final class Secrets extends JavaPlugin {
     }
 
     public SecretEntry getSecretEntrybySign(Sign sign) {
-        if (!sign.getPersistentDataContainer().has(plugin.getSecretSignKey())) {
+        if (!sign.getPersistentDataContainer().has(plugin.getSecretSignKey(), PersistentDataType.STRING)) {
             return null;
         }
 
@@ -226,5 +236,9 @@ public final class Secrets extends JavaPlugin {
         }
 
         this.lastUpdateTime = lastUpdate;
+    }
+
+    public boolean isPaperServer() {
+        return isPaperServer;
     }
 }

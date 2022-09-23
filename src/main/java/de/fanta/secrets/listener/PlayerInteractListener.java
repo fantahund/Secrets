@@ -25,7 +25,7 @@ public class PlayerInteractListener implements Listener {
     public void onSecretClick(PlayerInteractEvent e) {
         Player player = e.getPlayer();
         if ((e.getAction() == Action.RIGHT_CLICK_BLOCK) && ((e.getClickedBlock().getState() instanceof Sign sign))) {
-            if (sign.getPersistentDataContainer().has(plugin.getSecretSignKey())) {
+            if (sign.getPersistentDataContainer().has(plugin.getSecretSignKey(), PersistentDataType.STRING)) {
                 String secretName = sign.getPersistentDataContainer().get(plugin.getSecretSignKey(), PersistentDataType.STRING);
                 if (secretName != null) {
                     SecretEntry secretEntry = plugin.getSecretEntrybyName(secretName);

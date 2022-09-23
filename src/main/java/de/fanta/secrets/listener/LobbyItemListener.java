@@ -42,7 +42,7 @@ public class LobbyItemListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
-        if (e.getPlayer().hasPermission(plugin.getPermissions().getSecretListPermission()) && config.getSecretItemWorlds().contains(e.getPlayer().getWorld().getName())) {
+        if (e.getPlayer().hasPermission(plugin.getPermissions().getSecretListPermission()) && config.getSecretItemUse() && config.getSecretItemWorlds().contains(e.getPlayer().getWorld().getName())) {
             e.getPlayer().getInventory().setItem(config.getSecretItemSlot(), secretItem);
         }
     }
@@ -50,13 +50,13 @@ public class LobbyItemListener implements Listener {
     @EventHandler
     public void onPlayerChangeWorld(PlayerChangedWorldEvent e) {
         if (e.getPlayer().hasPermission(plugin.getPermissions().getSecretListPermission())) {
-            if (config.getSecretItemWorlds().contains(e.getPlayer().getWorld().getName())) {
+            if (config.getSecretItemWorlds().contains(e.getPlayer().getWorld().getName()) && config.getSecretItemUse()) {
                 e.getPlayer().getInventory().setItem(config.getSecretItemSlot(), secretItem);
             } else {
                 ItemStack[] itemStacks = e.getPlayer().getInventory().getContents();
                 for (int i = 0; i < itemStacks.length; i++) {
                     ItemStack stack = itemStacks[i];
-                    if (stack != null && stack.getItemMeta().getPersistentDataContainer().has(namespacedKey)) {
+                    if (stack != null && stack.getItemMeta() != null && stack.getItemMeta().getPersistentDataContainer().has(namespacedKey, PersistentDataType.STRING)) {
                         e.getPlayer().getInventory().setItem(i, null);
                     }
                 }
@@ -69,7 +69,7 @@ public class LobbyItemListener implements Listener {
         ItemStack stack = e.getCurrentItem();
         if (stack != null) {
             ItemMeta meta = stack.getItemMeta();
-            if (meta != null && meta.getPersistentDataContainer().has(namespacedKey) && e.getWhoClicked().getGameMode() != GameMode.CREATIVE) {
+            if (meta != null && meta.getPersistentDataContainer().has(namespacedKey, PersistentDataType.STRING) && e.getWhoClicked().getGameMode() != GameMode.CREATIVE) {
                 e.setCancelled(true);
             }
         }
@@ -81,7 +81,7 @@ public class LobbyItemListener implements Listener {
                     ItemStack swap = e.getWhoClicked().getInventory().getItem(slot);
                     if (swap != null) {
                         ItemMeta swapItemMeta = swap.getItemMeta();
-                        if (swapItemMeta != null && swapItemMeta.getPersistentDataContainer().has(namespacedKey) && e.getWhoClicked().getGameMode() != GameMode.CREATIVE) {
+                        if (swapItemMeta != null && swapItemMeta.getPersistentDataContainer().has(namespacedKey, PersistentDataType.STRING) && e.getWhoClicked().getGameMode() != GameMode.CREATIVE) {
                             e.setCancelled(true);
                         }
                     }
@@ -94,7 +94,7 @@ public class LobbyItemListener implements Listener {
     public void onItemDrop(PlayerDropItemEvent e) {
         ItemStack stack = e.getItemDrop().getItemStack();
         ItemMeta meta = stack.getItemMeta();
-        if (meta != null && meta.getPersistentDataContainer().has(namespacedKey) && e.getPlayer().getGameMode() != GameMode.CREATIVE) {
+        if (meta != null && meta.getPersistentDataContainer().has(namespacedKey, PersistentDataType.STRING) && e.getPlayer().getGameMode() != GameMode.CREATIVE) {
             e.setCancelled(true);
         }
     }
@@ -104,7 +104,7 @@ public class LobbyItemListener implements Listener {
         ItemStack stack = e.getOffHandItem();
         if (stack != null) {
             ItemMeta meta = stack.getItemMeta();
-            if (meta != null && meta.getPersistentDataContainer().has(namespacedKey) && e.getPlayer().getGameMode() != GameMode.CREATIVE) {
+            if (meta != null && meta.getPersistentDataContainer().has(namespacedKey, PersistentDataType.STRING) && e.getPlayer().getGameMode() != GameMode.CREATIVE) {
                 e.setCancelled(true);
             }
         }
@@ -116,8 +116,8 @@ public class LobbyItemListener implements Listener {
             ItemStack stack = e.getItem();
             if (stack != null) {
                 ItemMeta meta = stack.getItemMeta();
-                if (meta != null && meta.getPersistentDataContainer().has(namespacedKey)) {
-                    if (e.getPlayer().hasPermission(plugin.getPermissions().getSecretListPermission())) {
+                if (meta != null && meta.getPersistentDataContainer().has(namespacedKey, PersistentDataType.STRING)) {
+                    if (e.getPlayer().hasPermission(plugin.getPermissions().getSecretListPermission()) && config.getSecretItemUse()) {
                         new SecretsFoungGui(plugin.getPlayerSecrets(e.getPlayer()), e.getPlayer(), plugin).open();
                     }
                 }

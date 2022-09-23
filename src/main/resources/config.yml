@@ -1,6 +1,4 @@
 database:
-  #Use MySQL or SQLite
-  usemysql: false
   host: localhost
   user: CHANGETHIS
   password: CHANGETHIS

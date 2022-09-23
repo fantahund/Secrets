@@ -10,9 +10,8 @@ import java.util.List;
 public class SecretsConfig {
     private final Secrets plugin;
     private SQLConfig sqlConfig;
-    private boolean useMysqlDatabase;
     private String serverName;
-    private int secretItemUse;
+    private boolean secretItemUse;
     private int secretItemSlot;
     private List<String> secretItemWorlds;
 
@@ -28,9 +27,8 @@ public class SecretsConfig {
         plugin.saveConfig();
 
         sqlConfig = new SQLConfigBukkit(config.getConfigurationSection("database"));
-        useMysqlDatabase = config.getBoolean("database.usemysql");
         serverName = config.getString("database.servername");
-        secretItemUse = config.getInt("lobbyitem.use");
+        secretItemUse = config.getBoolean("lobbyitem.use");
         secretItemSlot = config.getInt("lobbyitem.slot");
         secretItemWorlds = config.getStringList("lobbyitem.worlds");
     }
@@ -39,15 +37,11 @@ public class SecretsConfig {
         return sqlConfig;
     }
 
-    public boolean useMysqlDatabase() {
-        return useMysqlDatabase;
-    }
-
     public String getServerName() {
         return serverName;
     }
 
-    public int getSecretItemUse() {
+    public boolean getSecretItemUse() {
         return secretItemUse;
     }
 

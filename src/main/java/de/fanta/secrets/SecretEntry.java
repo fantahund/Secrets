@@ -2,7 +2,6 @@ package de.fanta.secrets;
 
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
 public class SecretEntry {
     private final String secretName;
@@ -11,7 +10,7 @@ public class SecretEntry {
     private Location secretLocation;
     private ItemStack displayStack;
 
-    public SecretEntry(String secretName, String serverName, String worldName, Location secretLocation, @Nullable ItemStack displayStack) {
+    public SecretEntry(String secretName, String serverName, String worldName, Location secretLocation, ItemStack displayStack) {
         this.secretName = secretName;
         this.serverName = serverName;
         this.worldName = worldName;

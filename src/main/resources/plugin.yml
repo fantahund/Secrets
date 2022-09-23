@@ -5,3 +5,44 @@ author: ${project.author}
 api-version: 1.19
 commands:
   secrets:
+    description: Secrets Command
+    aliases: [secret]
+permissions:
+  secrets.list:
+    default: op
+    description: use /secrets command and secret Lobby Item
+  secrets.create:
+    default: op
+    description: create secret
+  secrets.setdislayitem:
+    default: op
+    description: Set display item for a Secret
+  secrets.loaddatabase:
+    default: op
+    description: reload secrets from database
+  secrets.deletesecret:
+    default: op
+    description: delete a secret
+  secrets.deleteplayersecrets:
+    default: op
+    description: delete a secret for all players
+  secrets.user:
+    default: op
+    description: all user permissions
+    children:
+      - secrets.list
+  secrets.mod:
+    default: op
+    description: all user permissions
+    children:
+      - secrets.create
+      - secrets.setdislayitem
+  secrets.admin:
+    default: op
+    description: all user permissions
+    children:
+      - secrets.create
+      - secrets.setdislayitem
+      - secrets.loaddatabase
+      - secrets.deletesecret
+      - secrets.deleteplayersecrets
