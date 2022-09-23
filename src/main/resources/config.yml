@@ -10,5 +10,6 @@ lobbyitem:
   use: true
   #Lobby Item Slot (0-8)
   slot: 0
+  #worlds where you have the lobby item
   worlds:
     - CHANGETHIS
