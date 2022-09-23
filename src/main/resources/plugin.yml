@@ -41,8 +41,6 @@ permissions:
     default: op
     description: all admin permissions
     children:
-      - secrets.create
-      - secrets.setdislayitem
       - secrets.loaddatabase
       - secrets.deletesecret
       - secrets.deleteplayersecrets
