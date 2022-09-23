@@ -33,13 +33,13 @@ permissions:
       - secrets.list
   secrets.mod:
     default: op
-    description: all user permissions
+    description: all mod permissions
     children:
       - secrets.create
       - secrets.setdislayitem
   secrets.admin:
     default: op
-    description: all user permissions
+    description: all admin permissions
     children:
       - secrets.create
       - secrets.setdislayitem
