@@ -18,7 +18,7 @@ public class SecretsLoadfromDatabaseCommand extends SubCommand {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String alias, String commandString, ArgsParser args) {
         plugin.loadSecretsfromDatabase();
-        ChatUtil.sendNormalMessage(sender, "Secrets wurden neu geladen.");
+        ChatUtil.sendNormalMessage(sender, plugin.getMessages().getReloadDatabase());
         return true;
     }
 

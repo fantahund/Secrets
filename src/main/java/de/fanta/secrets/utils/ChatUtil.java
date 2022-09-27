@@ -27,6 +27,10 @@ public class ChatUtil {
         ChatUtilBukkit.sendMessage(sender, Secrets.getPlugin().getPrefix(), colors, messageParts);
     }
 
+    public static void sendMessage(CommandSender sender, Object... messageParts) {
+        ChatUtilBukkit.sendMessage(sender, Secrets.getPlugin().getPrefix(), null, messageParts);
+    }
+
     public static void sendNormalMessage(CommandSender sender, Object... messageParts) {
         sendMessage(sender, GREEN.toString(), messageParts);
     }

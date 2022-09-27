@@ -14,6 +14,7 @@ public class SecretsConfig {
     private boolean secretItemUse;
     private int secretItemSlot;
     private List<String> secretItemWorlds;
+    private String language;
 
     public SecretsConfig(Secrets plugin) {
         this.plugin = plugin;
@@ -31,6 +32,7 @@ public class SecretsConfig {
         secretItemUse = config.getBoolean("lobbyitem.use");
         secretItemSlot = config.getInt("lobbyitem.slot");
         secretItemWorlds = config.getStringList("lobbyitem.worlds");
+        language = config.getString("language");
     }
 
     public SQLConfig getSQLConfig() {
@@ -51,5 +53,9 @@ public class SecretsConfig {
 
     public List<String> getSecretItemWorlds() {
         return secretItemWorlds;
+    }
+
+    public String getLanguage() {
+        return language;
     }
 }

@@ -6,6 +6,8 @@ import de.fanta.secrets.commands.SecretListCommand;
 import de.fanta.secrets.commands.SecretSetDisplayItemCommand;
 import de.fanta.secrets.commands.SecretsLoadfromDatabaseCommand;
 import de.fanta.secrets.data.Database;
+import de.fanta.secrets.data.LanguageManager;
+import de.fanta.secrets.data.Messages;
 import de.fanta.secrets.data.Permissions;
 import de.fanta.secrets.data.SecretsConfig;
 import de.fanta.secrets.listener.BlockBreakListener;
@@ -45,20 +47,24 @@ public final class Secrets extends JavaPlugin {
     private Database database;
     private SecretsConfig config;
     private Permissions permissions;
+    private Messages messages;
     private NamespacedKey secretSignKey;
     private HashMap<String, SecretEntry> secretEntries;
     private HashMap<UUID, List<SecretEntry>> playerSecrets;
     private long lastUpdateTime;
     private boolean isPaperServer;
+    private LanguageManager languageManager;
 
     @Override
     public void onEnable() {
         plugin = this;
         this.config = new SecretsConfig(this);
+        this.languageManager = new LanguageManager(this, config);
         this.permissions = new Permissions();
+        this.messages = new Messages(languageManager);
         this.secretSignKey = new NamespacedKey(this, "secretSign");
         new WindowManager(this);
-        prefix = ChatUtil.BLUE + "[" + ChatUtil.GREEN + "Secret" + ChatUtil.BLUE + "]";
+        prefix = messages.getPrefix();
 
         PluginManager pM = Bukkit.getPluginManager();
         pM.registerEvents(new PlayerJoinListener(this), this);
@@ -93,6 +99,8 @@ public final class Secrets extends JavaPlugin {
             isPaperServer = false;
         }
 
+        new bStats(this, config).registerbStats();
+
         startUpdateTimer();
 
         loadSecretsfromDatabase();
@@ -119,6 +127,10 @@ public final class Secrets extends JavaPlugin {
 
     public Permissions getPermissions() {
         return permissions;
+    }
+
+    public Messages getMessages() {
+        return messages;
     }
 
     public NamespacedKey getSecretSignKey() {
@@ -240,5 +252,9 @@ public final class Secrets extends JavaPlugin {
 
     public boolean isPaperServer() {
         return isPaperServer;
+    }
+
+    public LanguageManager getLanguageManager() {
+        return languageManager;
     }
 }

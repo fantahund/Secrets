@@ -33,7 +33,7 @@ public class LobbyItemListener implements Listener {
         this.namespacedKey = new NamespacedKey(plugin, "LobbyItem");
         ItemStack itemStack = new ItemStack(Material.EMERALD);
         ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(ChatUtil.GREEN + "Secrets");
+        itemMeta.setDisplayName(plugin.getMessages().getLobbyItemName());
         itemMeta.getPersistentDataContainer().set(this.namespacedKey, PersistentDataType.STRING, "LobbyItem");
         itemStack.setItemMeta(itemMeta);
         this.secretItem = itemStack;

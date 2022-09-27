@@ -28,12 +28,12 @@ public class SecretDeletePlayerSecretsCommand extends SubCommand {
                     plugin.getDatabase().deletePlayerSecret(secretName);
                 } catch (SQLException ex) {
                     plugin.getLogger().log(Level.SEVERE, "Secret " + secretName + " could not be deleted.", ex);
-                    ChatUtil.sendErrorMessage(sender, "Fehler beim löschen von Spieler Secrets " + ChatUtil.BLUE + secretName);
+                    ChatUtil.sendErrorMessage(sender, plugin.getMessages().getDeleteSecretfromPlayersError(secretName));
                     return true;
                 }
                 plugin.setUpdateTime();
                 plugin.loadSecretsfromDatabase();
-                ChatUtil.sendNormalMessage(sender, "Du hast das Secret " + ChatUtil.BLUE + secretName + ChatUtil.GREEN + " von allen Spielern erfolgreich gelöscht.");
+                ChatUtil.sendNormalMessage(sender, plugin.getMessages().getDeleteSecretfromPlayersSuccessful(secretName));
         } else {
             ChatUtil.sendErrorMessage(sender, "/secrets deleteplayersecrets <secret>.");
             return true;

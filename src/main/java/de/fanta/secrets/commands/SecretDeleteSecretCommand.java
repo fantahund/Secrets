@@ -33,7 +33,7 @@ public class SecretDeleteSecretCommand extends SubCommand {
                     plugin.getDatabase().deleteSecret(secretEntry.getSecretName());
                 } catch (SQLException ex) {
                     plugin.getLogger().log(Level.SEVERE, "Secret " + secretEntry.getSecretName() + " could not be deleted.", ex);
-                    ChatUtil.sendErrorMessage(sender, "Fehler beim löschen von Secret " + ChatUtil.BLUE + secretEntry.getSecretName());
+                    ChatUtil.sendErrorMessage(sender, plugin.getMessages().getDeleteSecretError(secretName));
                     return true;
                 }
 
@@ -44,9 +44,9 @@ public class SecretDeleteSecretCommand extends SubCommand {
                 plugin.removeSecrets(secretEntry);
                 plugin.setUpdateTime();
                 plugin.loadSecretsfromDatabase();
-                ChatUtil.sendNormalMessage(sender, "Du hast das Secret " + ChatUtil.BLUE + secretEntry.getSecretName() + ChatUtil.GREEN + " erfolgreich gelöscht.");
+                ChatUtil.sendNormalMessage(sender, plugin.getMessages().getDeleteSecretSuccessful(secretName));
             } else {
-                ChatUtil.sendErrorMessage(sender, "Das Secret " + secretName + " existiert nicht.");
+                ChatUtil.sendErrorMessage(sender, plugin.getMessages().getSecretNotExist(secretName));
             }
         } else {
             ChatUtil.sendErrorMessage(sender, "/secrets deletesecret <secret>.");

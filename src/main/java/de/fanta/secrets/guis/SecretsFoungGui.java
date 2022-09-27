@@ -2,7 +2,6 @@ package de.fanta.secrets.guis;
 
 import de.fanta.secrets.SecretEntry;
 import de.fanta.secrets.Secrets;
-import de.fanta.secrets.utils.ChatUtil;
 import de.fanta.secrets.utils.CustomHeadsUtil;
 import de.fanta.secrets.utils.guiutils.AbstractWindow;
 import de.fanta.secrets.utils.guiutils.GUIUtils;
@@ -36,7 +35,7 @@ public class SecretsFoungGui extends AbstractWindow {
     private final Secrets plugin;
 
     public SecretsFoungGui(List<SecretEntry> secretList, Player player, Secrets plugin) {
-        super(player, Bukkit.createInventory(player, WINDOW_SIZE, ChatUtil.GREEN + "Secrets"));
+        super(player, Bukkit.createInventory(player, WINDOW_SIZE, plugin.getMessages().getGuiTitle()));
         this.plugin = plugin;
         secretsListByPlayer.put(player.getUniqueId(), secretList);
         this.numOfItemRows = (int) (Math.ceil(secretList.size() / (double) NUM_OF_ITEM_COLUMNS));
@@ -49,13 +48,13 @@ public class SecretsFoungGui extends AbstractWindow {
         // build scroll buttons
         ItemStack scrollUpHead = this.scrollAmount <= 0 ? CustomHeadsUtil.RAINBOW_BLANK.getHead() : CustomHeadsUtil.RAINBOW_ARROW_UP.getHead();
         ItemMeta scrollUpMeta = scrollUpHead.getItemMeta();
-        scrollUpMeta.setDisplayName((this.scrollAmount <= 0 ? ChatColor.GRAY : ChatColor.WHITE) + "Nach oben scrollen");
+        scrollUpMeta.setDisplayName((this.scrollAmount <= 0 ? ChatColor.GRAY : ChatColor.WHITE) + plugin.getMessages().getGuiScrollUp());
         scrollUpHead.setItemMeta(scrollUpMeta);
         content[NUM_OF_COLUMNS - 1] = scrollUpHead;
 
         ItemStack scrollDownHead = this.scrollAmount >= this.numOfItemRows - NUM_OF_ROWS ? CustomHeadsUtil.RAINBOW_BLANK.getHead() : CustomHeadsUtil.RAINBOW_ARROW_DOWN.getHead();
         ItemMeta scrollDownMeta = scrollDownHead.getItemMeta();
-        scrollDownMeta.setDisplayName((this.scrollAmount >= this.numOfItemRows - NUM_OF_ROWS ? ChatColor.GRAY : ChatColor.WHITE) + "Nach unten scrollen");
+        scrollDownMeta.setDisplayName((this.scrollAmount >= this.numOfItemRows - NUM_OF_ROWS ? ChatColor.GRAY : ChatColor.WHITE) + plugin.getMessages().getGuiScrollDown());
         scrollDownHead.setItemMeta(scrollDownMeta);
         content[WINDOW_SIZE - 1] = scrollDownHead;
 
@@ -79,8 +78,8 @@ public class SecretsFoungGui extends AbstractWindow {
             }
         }
 
-        content[CLOSE_INDEX] = CustomHeadsUtil.RAINBOW_X.getHead(ChatUtil.GREEN + "Menü schlißen");
-        content[SECRET_SCORE_INDEX] = GUIUtils.createGuiItem(Material.EMERALD, ChatUtil.GREEN + "Anzahl gefundener Secrets", "" + ChatUtil.BLUE + secrets.size() + ChatUtil.GREEN + "/" + ChatUtil.BLUE + plugin.getSecretEntries().size());
+        content[CLOSE_INDEX] = CustomHeadsUtil.RAINBOW_X.getHead(plugin.getMessages().getGuiClose());
+        content[SECRET_SCORE_INDEX] = GUIUtils.createGuiItem(Material.EMERALD, plugin.getMessages().getGuiSecretsFoundName(), plugin.getMessages().getGuiSecretsFoundLore(secrets.size(), plugin.getSecretEntries().size()));
         getInventory().setContents(content);
     }
 

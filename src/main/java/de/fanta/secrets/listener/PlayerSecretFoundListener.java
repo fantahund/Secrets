@@ -29,14 +29,14 @@ public class PlayerSecretFoundListener implements Listener {
             try {
                 plugin.addPlayerSecret(player, secretEntry);
                 plugin.getDatabase().insertPlayerSecret(player, secretEntry.getSecretName());
-                ChatUtil.sendNormalMessage(player, "Du hast das Secret " + ChatUtil.BLUE + secretEntry.getSecretName() + ChatUtil.GREEN + " gefunden!");
-                ChatUtil.sendTitleToPlayer(player, secretEntry.getSecretName(), ChatUtil.GREEN + "Du hast ein Secret gefunden!", ChatUtil.GREEN, 10, 60, 10, false);
+                ChatUtil.sendNormalMessage(player, plugin.getMessages().getSecretFound(secretEntry.getSecretName()));
+                ChatUtil.sendTitleToPlayer(player, plugin.getMessages().getSecretFoundTitle(secretEntry.getSecretName()), plugin.getMessages().getSecretFoundSubTitle(secretEntry.getSecretName()), ChatUtil.GREEN, 10, 60, 10, false);
                 player.getWorld().playSound(player, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1, 1);
             } catch (SQLException ex) {
                 plugin.getLogger().log(Level.SEVERE, "Secrets " + secretEntry.getSecretName() + " could not be saved for player " + player.getName() + ".", ex);
             }
         } else {
-            ChatUtil.sendNormalMessage(player, "Du hast das Secret " + ChatUtil.BLUE + secretEntry.getSecretName() + ChatUtil.GREEN + " bereits gefunden!");
+            ChatUtil.sendWarningMessage(player, plugin.getMessages().getSecretAlwaysFound(secretEntry.getSecretName()));
         }
     }
 }

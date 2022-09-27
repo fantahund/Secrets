@@ -13,3 +13,4 @@ lobbyitem:
   #worlds where you have the lobby item
   worlds:
     - CHANGETHIS
+language: en_EN

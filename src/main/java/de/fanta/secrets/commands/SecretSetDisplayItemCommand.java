@@ -41,14 +41,16 @@ public class SecretSetDisplayItemCommand extends SubCommand {
                         plugin.getDatabase().updateSecretDisplayItem(ItemStackUtil.createDisplayItemString(displayItem), secretEntry.getSecretName());
                     } catch (SQLException ex) {
                         plugin.getLogger().log(Level.SEVERE, "Display item for Secret " + secretEntry.getSecretName() + " could not be set.", ex);
+                        ChatUtil.sendErrorMessage(player, plugin.getMessages().getSetDisplayItemError(secretEntry.getSecretName()));
+                        return true;
                     }
-                    ChatUtil.sendNormalMessage(player, "Du hast das DisplayItem für Secret " + ChatUtil.BLUE + secretEntry.getSecretName() + ChatUtil.GREEN + " erfolgreich gesetzt.");
+                    ChatUtil.sendNormalMessage(player, plugin.getMessages().getSetDisplayItemSuccessful(secretEntry.getSecretName()));
                     plugin.setUpdateTime();
                 } else {
-                    ChatUtil.sendErrorMessage(player, "Das Secret " + secretName + " existiert nicht.");
+                    ChatUtil.sendErrorMessage(player, plugin.getMessages().getSecretNotExist(secretName));
                 }
             } else {
-                ChatUtil.sendErrorMessage(player, "Du musst ein DisplayItem in dir hand nehmen.");
+                ChatUtil.sendErrorMessage(player, plugin.getMessages().getSetDisplayItemNoItem());
                 return true;
             }
         } else {
