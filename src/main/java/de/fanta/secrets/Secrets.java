@@ -73,7 +73,7 @@ public final class Secrets extends JavaPlugin {
         pM.registerEvents(new PlayerInteractListener(this), this);
         pM.registerEvents(new BlockBreakListener(this), this);
         pM.registerEvents(new LobbyItemListener(this, config), this);
-        pM.registerEvents(new PlayerSecretFoundListener(this), this);
+        pM.registerEvents(new PlayerSecretFoundListener(this, config), this);
 
         CommandRouter commandRouter = new CommandRouter(getCommand("secrets"));
         commandRouter.addCommandMapping(new SecretListCommand(plugin));

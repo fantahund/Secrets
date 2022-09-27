@@ -1,3 +1,4 @@
+language: en_EN
 database:
   host: localhost
   user: CHANGETHIS
@@ -13,4 +14,7 @@ lobbyitem:
   #worlds where you have the lobby item
   worlds:
     - CHANGETHIS
-language: en_EN
+rewards:
+  commandReward:
+    enable: false
+    command: give %player% diamond 1

@@ -15,6 +15,8 @@ public class SecretsConfig {
     private int secretItemSlot;
     private List<String> secretItemWorlds;
     private String language;
+    private boolean commandReward;
+    private String commandRewardCommand;
 
     public SecretsConfig(Secrets plugin) {
         this.plugin = plugin;
@@ -33,6 +35,8 @@ public class SecretsConfig {
         secretItemSlot = config.getInt("lobbyitem.slot");
         secretItemWorlds = config.getStringList("lobbyitem.worlds");
         language = config.getString("language");
+        commandReward = config.getBoolean("rewards.commandReward.enable");
+        commandRewardCommand = config.getString("rewards.commandReward.command");
     }
 
     public SQLConfig getSQLConfig() {
@@ -57,5 +61,13 @@ public class SecretsConfig {
 
     public String getLanguage() {
         return language;
+    }
+
+    public boolean getCommandReward() {
+        return commandReward;
+    }
+
+    public String getCommandRewardCommand() {
+        return commandRewardCommand;
     }
 }

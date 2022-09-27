@@ -3,7 +3,9 @@ package de.fanta.secrets.listener;
 import de.fanta.secrets.SecretEntry;
 import de.fanta.secrets.Secrets;
 import de.fanta.secrets.api.PlayerFoundSecretEvent;
+import de.fanta.secrets.data.SecretsConfig;
 import de.fanta.secrets.utils.ChatUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
@@ -16,9 +18,11 @@ import java.util.logging.Level;
 public class PlayerSecretFoundListener implements Listener {
 
     private final Secrets plugin;
+    private final SecretsConfig config;
 
-    public PlayerSecretFoundListener(Secrets plugin) {
+    public PlayerSecretFoundListener(Secrets plugin, SecretsConfig config) {
         this.plugin = plugin;
+        this.config = config;
     }
 
     @EventHandler
@@ -29,11 +33,17 @@ public class PlayerSecretFoundListener implements Listener {
             try {
                 plugin.addPlayerSecret(player, secretEntry);
                 plugin.getDatabase().insertPlayerSecret(player, secretEntry.getSecretName());
-                ChatUtil.sendNormalMessage(player, plugin.getMessages().getSecretFound(secretEntry.getSecretName()));
-                ChatUtil.sendTitleToPlayer(player, plugin.getMessages().getSecretFoundTitle(secretEntry.getSecretName()), plugin.getMessages().getSecretFoundSubTitle(secretEntry.getSecretName()), ChatUtil.GREEN, 10, 60, 10, false);
-                player.getWorld().playSound(player, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1, 1);
             } catch (SQLException ex) {
                 plugin.getLogger().log(Level.SEVERE, "Secrets " + secretEntry.getSecretName() + " could not be saved for player " + player.getName() + ".", ex);
+                return;
+            }
+
+            ChatUtil.sendNormalMessage(player, plugin.getMessages().getSecretFound(secretEntry.getSecretName()));
+            ChatUtil.sendTitleToPlayer(player, plugin.getMessages().getSecretFoundTitle(secretEntry.getSecretName()), plugin.getMessages().getSecretFoundSubTitle(secretEntry.getSecretName()), ChatUtil.GREEN, 10, 60, 10, false);
+            player.getWorld().playSound(player, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1, 1);
+
+            if (config.getCommandReward()) {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getCommandRewardCommand().replace("%player%", e.getPlayer().getName()));
             }
         } else {
             ChatUtil.sendWarningMessage(player, plugin.getMessages().getSecretAlwaysFound(secretEntry.getSecretName()));

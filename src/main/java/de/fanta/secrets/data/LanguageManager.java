@@ -21,7 +21,6 @@ public class LanguageManager {
         this.languages = new String[]{"de_DE", "en_EN"};
         loadLanguageFiles();
         File currentLanguage = new File(languageFolder, config.getLanguage() + ".yml");
-        plugin.getLogger().log(Level.SEVERE, currentLanguage.getAbsolutePath());
         this.currentMessages = YamlConfiguration.loadConfiguration(currentLanguage);
     }
 
