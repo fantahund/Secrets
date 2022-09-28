@@ -3,10 +3,11 @@ package de.fanta.secrets.listener;
 import de.fanta.secrets.Secrets;
 import de.fanta.secrets.data.SecretsConfig;
 import de.fanta.secrets.guis.SecretsFoungGui;
-import de.fanta.secrets.utils.ChatUtil;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Container;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -118,6 +119,10 @@ public class LobbyItemListener implements Listener {
                 ItemMeta meta = stack.getItemMeta();
                 if (meta != null && meta.getPersistentDataContainer().has(namespacedKey, PersistentDataType.STRING)) {
                     if (e.getPlayer().hasPermission(plugin.getPermissions().getSecretListPermission()) && config.getSecretItemUse()) {
+                        if (e.hasBlock() && e.getAction() == Action.RIGHT_CLICK_BLOCK && (e.getClickedBlock().getState() instanceof Container || e.getClickedBlock().getType().isInteractable() || e.getClickedBlock().getType() == Material.IRON_DOOR)) {
+                            e.setUseItemInHand(Event.Result.DENY);
+                            return;
+                        }
                         new SecretsFoungGui(plugin.getPlayerSecrets(e.getPlayer()), e.getPlayer(), plugin).open();
                     }
                 }
