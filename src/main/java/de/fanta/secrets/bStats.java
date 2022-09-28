@@ -10,6 +10,6 @@ public record bStats(Secrets plugin, SecretsConfig config) {
         int pluginId = 16510;
         Metrics metrics = new Metrics(plugin, pluginId);
         metrics.addCustomChart(new SimplePie("use_lobby-item", () -> String.valueOf(config.getSecretItemUse())));
-        metrics.addCustomChart(new SimplePie("Language", config::getLanguage));
+        metrics.addCustomChart(new SimplePie("language", config::getLanguage));
     }
 }
