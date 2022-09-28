@@ -1,4 +1,7 @@
+#Plugin Language (en_EN, de_DE)
 language: en_EN
+
+#Database Login
 database:
   host: localhost
   user: CHANGETHIS
@@ -6,6 +9,8 @@ database:
   database: CHANGETHIS
   tableprefix: secrets
   servername: CHANGETHIS
+
+#Lobby-Item Settings
 lobbyitem:
   #Give Player Secret Item by Join
   use: true
@@ -14,10 +19,14 @@ lobbyitem:
   #worlds where you have the lobby item
   worlds:
     - CHANGETHIS
+
+#Reward Settings
 rewards:
+  #Runs a command as a console
   commandReward:
     enable: false
     command: give %player% diamond 1
+  #Gives the player money via the Vault API
   economyReward:
     enable: false
     amount: 100.0

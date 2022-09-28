@@ -1,3 +1,4 @@
+#Nutze Normale Chat Farben (--> &6 <-- Gold) oder Hex Farben (--> &xffffff <-- Weiß)
 prefix: '&x87f7ea[&x52ff9dSecret&x87f7ea]'
 loadDatabase: 'Secrets wurden neu aus der Datenbank geladen.'
 deleteSecretfromPlayersError: 'Fehler beim Löschen des Secrets &x87f7ea%secret% &x52ff9dfür alle Spieler.'
