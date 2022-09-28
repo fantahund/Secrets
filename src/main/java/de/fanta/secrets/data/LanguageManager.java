@@ -6,6 +6,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Level;
 
 public class LanguageManager {
@@ -32,6 +36,17 @@ public class LanguageManager {
                 plugin.getLogger().log(Level.INFO, "create " + languageConfig.getAbsolutePath());
                 languageConfig.getParentFile().mkdirs();
                 plugin.saveResource("languages/" + string + ".yml", false);
+            } else {
+                FileConfiguration langConfig = YamlConfiguration.loadConfiguration(languageConfig);
+                Reader defConfigStream = new InputStreamReader(plugin.getResource("languages/" + string + ".yml"), StandardCharsets.UTF_8);
+                YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
+                langConfig.setDefaults(defConfig);
+                langConfig.options().copyDefaults(true);
+                try {
+                    langConfig.save(languageConfig);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
