@@ -34,6 +34,7 @@ public class Messages {
     private String signLine2;
     private String signLine3;
     private String signLine4;
+    private String economyReward;
 
     public Messages(LanguageManager languageManager) {
         loadMessages(languageManager);
@@ -72,6 +73,7 @@ public class Messages {
         signLine2 = languageManager.getMessage("signLine2");
         signLine3 = languageManager.getMessage("signLine3");
         signLine4 = languageManager.getMessage("signLine4");
+        economyReward = languageManager.getMessage("economyReward");
     }
 
     public String getPrefix() {
@@ -200,5 +202,9 @@ public class Messages {
 
     public String getSignLine4(String secretName) {
         return signLine4.replace("%secret%", secretName);
+    }
+
+    public String getEconomyReward(double money, String currency) {
+        return economyReward.replace("%money%", String.valueOf(money)).replace("%currency%", currency);
     }
 }

@@ -5,6 +5,7 @@ import de.fanta.secrets.Secrets;
 import de.fanta.secrets.api.PlayerFoundSecretEvent;
 import de.fanta.secrets.data.SecretsConfig;
 import de.fanta.secrets.utils.ChatUtil;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -44,6 +45,15 @@ public class PlayerSecretFoundListener implements Listener {
 
             if (config.getCommandReward()) {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getCommandRewardCommand().replace("%player%", e.getPlayer().getName()));
+            }
+
+            if (config.getEconomyReward()) {
+                Economy economy = plugin.getEconomy();
+                if (economy != null) {
+                    double reward = config.getEconomyRewardAmount();
+                    economy.depositPlayer(e.getPlayer(), reward);
+                    ChatUtil.sendNormalMessage(e.getPlayer(), plugin.getMessages().getEconomyReward(reward, reward > 1 ? economy.currencyNamePlural() : economy.currencyNameSingular()));
+                }
             }
         } else {
             ChatUtil.sendWarningMessage(player, plugin.getMessages().getSecretAlwaysFound(secretEntry.getSecretName()));

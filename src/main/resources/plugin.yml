@@ -3,6 +3,7 @@ main: ${mainClass}
 version: ${project.version}
 author: ${project.author}
 api-version: 1.19
+softdepend: [Vault]
 commands:
   secrets:
     description: Secrets Command

@@ -20,6 +20,7 @@ import de.fanta.secrets.listener.SignCreateListener;
 import de.fanta.secrets.utils.ChatUtil;
 import de.fanta.secrets.utils.guiutils.WindowManager;
 import de.iani.cubesideutils.bukkit.commands.CommandRouter;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -31,6 +32,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
@@ -54,6 +56,7 @@ public final class Secrets extends JavaPlugin {
     private long lastUpdateTime;
     private boolean isPaperServer;
     private LanguageManager languageManager;
+    private Economy economy;
 
     @Override
     public void onEnable() {
@@ -81,6 +84,13 @@ public final class Secrets extends JavaPlugin {
         commandRouter.addCommandMapping(new SecretsLoadfromDatabaseCommand(plugin), "loadfromdatabase");
         commandRouter.addCommandMapping(new SecretDeleteSecretCommand(plugin), "deletesecret");
         commandRouter.addCommandMapping(new SecretDeletePlayerSecretsCommand(plugin), "deleteplayersecrets");
+
+        if (getServer().getPluginManager().getPlugin("Vault") != null) {
+            RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+            if (rsp != null) {
+                economy = rsp.getProvider();
+            }
+        }
 
         this.database = new Database(config.getSQLConfig(), this);
 
@@ -256,5 +266,9 @@ public final class Secrets extends JavaPlugin {
 
     public LanguageManager getLanguageManager() {
         return languageManager;
+    }
+
+    public Economy getEconomy() {
+        return economy;
     }
 }

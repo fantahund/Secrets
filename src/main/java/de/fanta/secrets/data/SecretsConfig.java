@@ -17,6 +17,8 @@ public class SecretsConfig {
     private String language;
     private boolean commandReward;
     private String commandRewardCommand;
+    private boolean economyReward;
+    private double economyRewardAmount;
 
     public SecretsConfig(Secrets plugin) {
         this.plugin = plugin;
@@ -37,6 +39,8 @@ public class SecretsConfig {
         language = config.getString("language");
         commandReward = config.getBoolean("rewards.commandReward.enable");
         commandRewardCommand = config.getString("rewards.commandReward.command");
+        economyReward = config.getBoolean("rewards.economyReward.enable");
+        economyRewardAmount = config.getDouble("rewards.economyReward.amount");
     }
 
     public SQLConfig getSQLConfig() {
@@ -69,5 +73,13 @@ public class SecretsConfig {
 
     public String getCommandRewardCommand() {
         return commandRewardCommand;
+    }
+
+    public boolean getEconomyReward() {
+        return economyReward;
+    }
+
+    public double getEconomyRewardAmount() {
+        return economyRewardAmount;
     }
 }
