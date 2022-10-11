@@ -8,6 +8,7 @@ public class Permissions {
     private String loadDatabaseSecretsPermission;
     private String deleteSecretPermission;
     private String deletePlayerSecretsPermission;
+    private String giveDisplayItemPermission;
 
     public Permissions() {
         loadPermissions();
@@ -20,6 +21,7 @@ public class Permissions {
         loadDatabaseSecretsPermission = "secrets.loaddatabase";
         deleteSecretPermission = "secrets.deletesecret";
         deletePlayerSecretsPermission = "secrets.deleteplayersecrets";
+        giveDisplayItemPermission = "secrets.givedisplayitem";
     }
 
     public String getCreateSecretPermission() {
@@ -44,5 +46,9 @@ public class Permissions {
 
     public String getDeletePlayerSecretsPermission() {
         return deletePlayerSecretsPermission;
+    }
+
+    public String getGiveDisplayItemPermission() {
+        return giveDisplayItemPermission;
     }
 }

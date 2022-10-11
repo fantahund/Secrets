@@ -10,7 +10,6 @@ import java.util.List;
 public class SecretsConfig {
     private final Secrets plugin;
     private SQLConfig sqlConfig;
-    private String serverName;
     private boolean secretItemUse;
     private int secretItemSlot;
     private List<String> secretItemWorlds;
@@ -32,7 +31,6 @@ public class SecretsConfig {
         plugin.saveConfig();
 
         sqlConfig = new SQLConfigBukkit(config.getConfigurationSection("database"));
-        serverName = config.getString("database.servername");
         secretItemUse = config.getBoolean("lobbyitem.use");
         secretItemSlot = config.getInt("lobbyitem.slot");
         secretItemWorlds = config.getStringList("lobbyitem.worlds");
@@ -45,10 +43,6 @@ public class SecretsConfig {
 
     public SQLConfig getSQLConfig() {
         return sqlConfig;
-    }
-
-    public String getServerName() {
-        return serverName;
     }
 
     public boolean getSecretItemUse() {

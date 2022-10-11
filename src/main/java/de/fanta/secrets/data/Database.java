@@ -6,7 +6,6 @@ import de.fanta.secrets.utils.ItemStackUtil;
 import de.iani.cubesideutils.sql.MySQLConnection;
 import de.iani.cubesideutils.sql.SQLConfig;
 import de.iani.cubesideutils.sql.SQLConnection;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -30,7 +29,6 @@ public class Database {
     private final String insertSecretQuery;
     private final String insertPlayerSecretQuery;
     private final String updateSecretInventoryItemQuery;
-    private final String updateSecretLocationQuery;
     private final String getLastUpdateQuery;
     private final String updateLastUpdateQuery;
     private final String deleteSecretQuery;
@@ -50,10 +48,9 @@ public class Database {
 
         getSecretsQuery = "SELECT * FROM " + config.getTablePrefix() + "_secrets";
         getPlayerSecretsQuery = "SELECT * FROM " + config.getTablePrefix() + "_player" + " WHERE uuid = ?";
-        insertSecretQuery = "INSERT INTO " + config.getTablePrefix() + "_secrets" + " (secret, displayitem, server, world, x, y, z) VALUE (?, ?, ?, ?, ?, ?, ?)";
+        insertSecretQuery = "INSERT INTO " + config.getTablePrefix() + "_secrets" + " (secret, displayitem) VALUE (?, ?)";
         insertPlayerSecretQuery = "INSERT INTO " + config.getTablePrefix() + "_player" + " (uuid, secret) VALUE (?, ?)";
         updateSecretInventoryItemQuery = "UPDATE " + config.getTablePrefix() + "_secrets" + " SET `displayitem` = ? WHERE `secret` = ?";
-        updateSecretLocationQuery = "UPDATE " + config.getTablePrefix() + "_secrets" + " SET `world` = ?, `x` = ?, `y` = ?, `z` = ?  WHERE `secret` = ?";
         getLastUpdateQuery = "SELECT `lastupdatetime` FROM " + config.getTablePrefix() + "_update";
         updateLastUpdateQuery = "UPDATE " + config.getTablePrefix() + "_update" + " SET `lastupdatetime` = ?";
         deleteSecretQuery = "DELETE FROM " + config.getTablePrefix() + "_secrets" + " WHERE `secret` = ?";
@@ -110,15 +107,9 @@ public class Database {
             while (rs.next()) {
                 String secretName = rs.getString(1);
                 String displayItemString = rs.getString(2);
-                String serverName = rs.getString(3);
-                String worldName = rs.getString(4);
-                long x = rs.getLong(5);
-                long y = rs.getLong(6);
-                long z = rs.getLong(7);
 
                 ItemStack displayItem = ItemStackUtil.getDisplayItemfromString(displayItemString);
-
-                SecretEntry secretEntry = new SecretEntry(secretName, serverName, worldName, new Location(null, x, y, z), displayItem != null ? displayItem : new ItemStack(Material.BARRIER));
+                SecretEntry secretEntry = new SecretEntry(secretName, displayItem != null ? displayItem : new ItemStack(Material.BARRIER));
                 secretEntryMap.put(secretName.toLowerCase(), secretEntry);
             }
             return null;
@@ -143,18 +134,12 @@ public class Database {
         return secretEntries;
     }
 
-    public void insertSecret(String secretName, String serverName, String worldName, Location location, ItemStack displayItem) throws SQLException {
+    public void insertSecret(String secretName, ItemStack displayItem) throws SQLException {
         this.connection.runCommands((connection, sqlConnection) -> {
             PreparedStatement smt = sqlConnection.getOrCreateStatement(insertSecretQuery);
 
             smt.setString(1, secretName);
             smt.setString(2, ItemStackUtil.createDisplayItemString(displayItem));
-            smt.setString(3, serverName);
-            smt.setString(4, worldName);
-            smt.setLong(5, location.getBlockX());
-            smt.setLong(6, location.getBlockY());
-            smt.setLong(7, location.getBlockZ());
-
             smt.executeUpdate();
             return null;
         });
@@ -178,21 +163,6 @@ public class Database {
             smt.setString(2, secretName);
 
             smt.executeUpdate();
-            return null;
-        });
-    }
-
-    public void updateSecretPosition(String secretName, Location loc) throws SQLException {
-        this.connection.runCommands((connection, sqlConnection) -> {
-            PreparedStatement smt = sqlConnection.getOrCreateStatement(updateSecretLocationQuery);
-
-            smt.setString(1, loc.getWorld().getName());
-            smt.setDouble(2, loc.getX());
-            smt.setDouble(3, loc.getY());
-            smt.setDouble(4, loc.getZ());
-            smt.setString(5, secretName);
-            smt.executeUpdate();
-
             return null;
         });
     }

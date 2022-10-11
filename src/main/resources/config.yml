@@ -8,7 +8,6 @@ database:
   password: CHANGETHIS
   database: CHANGETHIS
   tableprefix: secrets
-  servername: CHANGETHIS
 
 #Lobby-Item Settings
 lobbyitem:

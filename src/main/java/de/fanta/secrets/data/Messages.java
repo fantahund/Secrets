@@ -25,16 +25,15 @@ public class Messages {
     private String secretFoundSubTitle;
     private String secretCreateError;
     private String secretCreateSuccessful;
-    private String secretOverrideDatabaseError;
-    private String secretOverrideSuccessful;
-    private String secretOverrideWrongServerError;
-    private String secretCreateAlwaysExist;
     private String secretCreateWrongSecretLineError;
     private String signLine1;
     private String signLine2;
     private String signLine3;
     private String signLine4;
     private String economyReward;
+    private String secretExistsCreatedNewSign;
+    private String giveDisplayItemSuccessful;
+    private String giveDisplayItemError;
 
     public Messages(LanguageManager languageManager) {
         loadMessages(languageManager);
@@ -64,16 +63,15 @@ public class Messages {
         secretFoundSubTitle = languageManager.getMessage("secretFoundSubTitle");
         secretCreateError = languageManager.getMessage("secretCreateError");
         secretCreateSuccessful = languageManager.getMessage("secretCreateSuccessful");
-        secretOverrideDatabaseError = languageManager.getMessage("secretOverrideDatabaseError");
-        secretOverrideSuccessful = languageManager.getMessage("secretOverrideSuccessful");
-        secretOverrideWrongServerError = languageManager.getMessage("secretOverrideWrongServerError");
-        secretCreateAlwaysExist = languageManager.getMessage("secretCreateAlwaysExist");
         secretCreateWrongSecretLineError = languageManager.getMessage("secretCreateWrongSecretLineError");
         signLine1 = languageManager.getMessage("signLine1");
         signLine2 = languageManager.getMessage("signLine2");
         signLine3 = languageManager.getMessage("signLine3");
         signLine4 = languageManager.getMessage("signLine4");
         economyReward = languageManager.getMessage("economyReward");
+        secretExistsCreatedNewSign = languageManager.getMessage("secretExistsCreatedNewSign");
+        giveDisplayItemSuccessful = languageManager.getMessage("giveDisplayItemSuccessful");
+        giveDisplayItemError = languageManager.getMessage("giveDisplayItemError");
     }
 
     public String getPrefix() {
@@ -168,22 +166,6 @@ public class Messages {
         return secretCreateSuccessful.replace("%secret%", secretName);
     }
 
-    public String getSecretOverrideDatabaseError(String secretName) {
-        return secretOverrideDatabaseError.replace("%secret%", secretName);
-    }
-
-    public String getSecretOverrideSuccessful(String secretName) {
-        return secretOverrideSuccessful.replace("%secret%", secretName);
-    }
-
-    public String getSecretOverrideWrongServerError(String secretName) {
-        return secretOverrideWrongServerError.replace("%secret%", secretName);
-    }
-
-    public String getSecretCreateAlwaysExist(String secretName) {
-        return secretCreateAlwaysExist.replace("%secret%", secretName);
-    }
-
     public String getSecretCreateWrongSecretLineError() {
         return secretCreateWrongSecretLineError;
     }
@@ -206,5 +188,17 @@ public class Messages {
 
     public String getEconomyReward(double money, String currency) {
         return economyReward.replace("%money%", String.valueOf(money)).replace("%currency%", currency);
+    }
+
+    public String getSecretExistsCreatedNewSign(String secretName) {
+        return secretExistsCreatedNewSign.replace("%secret%", secretName);
+    }
+
+    public String getGiveDisplayItemSuccessful(String secretName) {
+        return giveDisplayItemSuccessful.replace("%secret%", secretName);
+    }
+
+    public String getGiveDisplayItemError(String secretName) {
+        return giveDisplayItemError.replace("%secret%", secretName);
     }
 }

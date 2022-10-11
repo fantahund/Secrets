@@ -1,33 +1,18 @@
 package de.fanta.secrets;
 
-import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
 public class SecretEntry {
     private final String secretName;
-    private final String serverName;
-    private final String worldName;
-    private Location secretLocation;
     private ItemStack displayStack;
 
-    public SecretEntry(String secretName, String serverName, String worldName, Location secretLocation, ItemStack displayStack) {
+    public SecretEntry(String secretName, ItemStack displayStack) {
         this.secretName = secretName;
-        this.serverName = serverName;
-        this.worldName = worldName;
-        this.secretLocation = secretLocation;
         this.displayStack = displayStack;
     }
 
     public String getSecretName() {
         return secretName;
-    }
-
-    public String getServerName() {
-        return serverName;
-    }
-
-    public Location getSecretLocation() {
-        return secretLocation;
     }
 
     public ItemStack getDisplayStack() {
@@ -36,12 +21,5 @@ public class SecretEntry {
 
     public void setDisplayStack(ItemStack itemStack) {
         this.displayStack = itemStack;
-    }
-    public void setLocation(Location location) {
-        this.secretLocation = location;
-    }
-
-    public String getWorldName() {
-        return worldName;
     }
 }

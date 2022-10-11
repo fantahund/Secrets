@@ -2,6 +2,7 @@ package de.fanta.secrets;
 
 import de.fanta.secrets.commands.SecretDeletePlayerSecretsCommand;
 import de.fanta.secrets.commands.SecretDeleteSecretCommand;
+import de.fanta.secrets.commands.SecretGiveDisplayItemCommand;
 import de.fanta.secrets.commands.SecretListCommand;
 import de.fanta.secrets.commands.SecretSetDisplayItemCommand;
 import de.fanta.secrets.commands.SecretsLoadfromDatabaseCommand;
@@ -22,7 +23,6 @@ import de.fanta.secrets.utils.guiutils.WindowManager;
 import de.iani.cubesideutils.bukkit.commands.CommandRouter;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Sign;
@@ -72,7 +72,7 @@ public final class Secrets extends JavaPlugin {
         PluginManager pM = Bukkit.getPluginManager();
         pM.registerEvents(new PlayerJoinListener(this), this);
         pM.registerEvents(new PlayerLeaveListener(this), this);
-        pM.registerEvents(new SignCreateListener(this, config), this);
+        pM.registerEvents(new SignCreateListener(this), this);
         pM.registerEvents(new PlayerInteractListener(this), this);
         pM.registerEvents(new BlockBreakListener(this), this);
         pM.registerEvents(new LobbyItemListener(this, config), this);
@@ -84,6 +84,7 @@ public final class Secrets extends JavaPlugin {
         commandRouter.addCommandMapping(new SecretsLoadfromDatabaseCommand(plugin), "loadfromdatabase");
         commandRouter.addCommandMapping(new SecretDeleteSecretCommand(plugin), "deletesecret");
         commandRouter.addCommandMapping(new SecretDeletePlayerSecretsCommand(plugin), "deleteplayersecrets");
+        commandRouter.addCommandMapping(new SecretGiveDisplayItemCommand(plugin), "givedisplayitem");
 
         if (getServer().getPluginManager().getPlugin("Vault") != null) {
             RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
@@ -180,7 +181,7 @@ public final class Secrets extends JavaPlugin {
         playerSecrets.put(player.getUniqueId(), secretList);
     }
 
-    public boolean createSecret(String secretName, Location location) throws SQLException {
+    public boolean createSecret(String secretName) throws SQLException {
         if (secretEntries.containsKey(secretName.toLowerCase())) {
             return false;
         }
@@ -191,8 +192,8 @@ public final class Secrets extends JavaPlugin {
         itemStack.setItemMeta(itemMeta);
 
         updateCheck();
-        database.insertSecret(secretName, config.getServerName(), location.getWorld().getName(), location, itemStack);
-        secretEntries.put(secretName.toLowerCase(), new SecretEntry(secretName, config.getServerName(), location.getWorld().getName(), location, itemStack));
+        database.insertSecret(secretName, itemStack);
+        secretEntries.put(secretName.toLowerCase(), new SecretEntry(secretName, itemStack));
 
         setUpdateTime();
 
