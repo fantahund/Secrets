@@ -27,6 +27,9 @@ permissions:
   secrets.deleteplayersecrets:
     default: op
     description: delete a secret for all players
+  secrets.givedisplayitem:
+    default: op
+    description: give Secret DisplayItem
   secrets.user:
     default: op
     description: all user permissions
@@ -38,6 +41,7 @@ permissions:
     children:
       - secrets.create
       - secrets.setdislayitem
+      - secrets.givedisplayitem
   secrets.admin:
     default: op
     description: all admin permissions
