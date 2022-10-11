@@ -41,7 +41,7 @@ public class PlayerSecretFoundListener implements Listener {
 
             ChatUtil.sendNormalMessage(player, plugin.getMessages().getSecretFound(secretEntry.getSecretName()));
             ChatUtil.sendTitleToPlayer(player, plugin.getMessages().getSecretFoundTitle(secretEntry.getSecretName()), plugin.getMessages().getSecretFoundSubTitle(secretEntry.getSecretName()), ChatUtil.GREEN, 10, 60, 10, false);
-            player.getWorld().playSound(player, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1, 1);
+            player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1, 1);
 
             if (config.getCommandReward()) {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), config.getCommandRewardCommand().replace("%player%", e.getPlayer().getName()));
