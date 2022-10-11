@@ -15,3 +15,27 @@ Spigot page: https://www.spigotmc.org/resources/secrets-schilder-secrets-für-di
 Developmental builds: https://jenkins.fantacs.de/job/Secrets/
 
 For questions/help join our discord at: https://discord.com/invite/4nGrfZxb2a
+
+Maven Dependency
+=================
+The API is available for Maven.
+
+```xml
+<repositories>
+    <repository>
+        <id>fantanexus</id>
+        <url>https://nexus.fantacs.de/repository/maven-snapshots/</url>
+    </repository>
+</repositories>
+```
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>de.fanta.secrets</groupId>
+        <artifactId>Secrets</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+        <scope>provided</scope>
+    </dependency>
+</dependencies>
+```
