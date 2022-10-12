@@ -52,9 +52,9 @@ public class SecretsFoungGui extends AbstractWindow {
         scrollUpHead.setItemMeta(scrollUpMeta);
         content[NUM_OF_COLUMNS - 1] = scrollUpHead;
 
-        ItemStack scrollDownHead = this.scrollAmount >= this.numOfItemRows - NUM_OF_ROWS ? CustomHeadsUtil.RAINBOW_BLANK.getHead() : CustomHeadsUtil.RAINBOW_ARROW_DOWN.getHead();
+        ItemStack scrollDownHead = this.scrollAmount - 1 >= this.numOfItemRows - NUM_OF_ROWS ? CustomHeadsUtil.RAINBOW_BLANK.getHead() : CustomHeadsUtil.RAINBOW_ARROW_DOWN.getHead();
         ItemMeta scrollDownMeta = scrollDownHead.getItemMeta();
-        scrollDownMeta.setDisplayName((this.scrollAmount >= this.numOfItemRows - NUM_OF_ROWS ? ChatColor.GRAY : ChatColor.WHITE) + plugin.getMessages().getGuiScrollDown());
+        scrollDownMeta.setDisplayName((this.scrollAmount - 1 >= this.numOfItemRows - NUM_OF_ROWS ? ChatColor.GRAY : ChatColor.WHITE) + plugin.getMessages().getGuiScrollDown());
         scrollDownHead.setItemMeta(scrollDownMeta);
         content[WINDOW_SIZE - 1] = scrollDownHead;
 
@@ -117,7 +117,7 @@ public class SecretsFoungGui extends AbstractWindow {
     }
 
     private void attempScrollDown() {
-        if (this.scrollAmount >= this.numOfItemRows - NUM_OF_ROWS) {
+        if (this.scrollAmount - 1 >= this.numOfItemRows - NUM_OF_ROWS) {
             return;
         }
         this.scrollAmount++;
