@@ -32,6 +32,7 @@ public class PlayerInteractListener implements Listener {
                     if (secretEntry != null) {
                         PlayerFoundSecretEvent playerFoundSecretEvent = new PlayerFoundSecretEvent(e.getPlayer(), secretEntry, plugin.getPlayerSecrets(player).contains(secretEntry));
                         Bukkit.getServer().getPluginManager().callEvent(playerFoundSecretEvent);
+                        e.setCancelled(true);
                     } else {
                         ChatUtil.sendErrorMessage(player, plugin.getMessages().getSecretNotExist(secretName));
                     }
