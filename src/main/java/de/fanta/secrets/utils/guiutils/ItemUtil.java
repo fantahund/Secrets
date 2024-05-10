@@ -16,7 +16,7 @@ public class ItemUtil {
     public static ItemStack createGuiItem(Material material, String name, boolean glowing, String... lore) {
         ItemBuilder builder = ItemBuilder.fromMaterial(material).displayName(name).lore(lore);
         if (glowing)
-            builder.enchantment(Enchantment.DURABILITY, 1, true).flag(ItemFlag.HIDE_ENCHANTS);
+            builder.enchantment(Enchantment.UNBREAKING, 1, true).flag(ItemFlag.HIDE_ENCHANTS);
         return builder.build();
     }
 }
