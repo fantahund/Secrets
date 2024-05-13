@@ -19,7 +19,6 @@ import de.fanta.secrets.listener.PlayerLeaveListener;
 import de.fanta.secrets.listener.PlayerSecretFoundListener;
 import de.fanta.secrets.listener.SignCreateListener;
 import de.fanta.secrets.utils.ChatUtil;
-import de.fanta.secrets.utils.guiutils.WindowManager;
 import de.iani.cubesideutils.bukkit.commands.CommandRouter;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -66,7 +65,6 @@ public final class Secrets extends JavaPlugin {
         this.permissions = new Permissions();
         this.messages = new Messages(languageManager);
         this.secretSignKey = new NamespacedKey(this, "secretSign");
-        new WindowManager(this);
         prefix = messages.getPrefix();
 
         PluginManager pM = Bukkit.getPluginManager();

@@ -3,8 +3,8 @@ package de.fanta.secrets.guis;
 import de.fanta.secrets.SecretEntry;
 import de.fanta.secrets.Secrets;
 import de.fanta.secrets.utils.CustomHeadsUtil;
-import de.fanta.secrets.utils.guiutils.AbstractWindow;
-import de.fanta.secrets.utils.guiutils.GUIUtils;
+import de.fanta.secrets.utils.guiutils.ItemUtil;
+import de.iani.cubesideutils.bukkit.inventory.AbstractWindow;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -79,7 +79,7 @@ public class SecretsFoungGui extends AbstractWindow {
         }
 
         content[CLOSE_INDEX] = CustomHeadsUtil.RAINBOW_X.getHead(plugin.getMessages().getGuiClose());
-        content[SECRET_SCORE_INDEX] = GUIUtils.createGuiItem(Material.EMERALD, plugin.getMessages().getGuiSecretsFoundName(), plugin.getMessages().getGuiSecretsFoundLore(secrets.size(), plugin.getSecretEntries().size()));
+        content[SECRET_SCORE_INDEX] = ItemUtil.createGuiItem(Material.EMERALD, plugin.getMessages().getGuiSecretsFoundName(), plugin.getMessages().getGuiSecretsFoundLore(secrets.size(), plugin.getSecretEntries().size()));
         getInventory().setContents(content);
     }
 
