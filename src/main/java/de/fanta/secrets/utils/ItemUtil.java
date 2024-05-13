@@ -1,4 +1,4 @@
-package de.fanta.secrets.utils.guiutils;
+package de.fanta.secrets.utils;
 
 import de.iani.cubesideutils.bukkit.items.ItemBuilder;
 import org.bukkit.Material;

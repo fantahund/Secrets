@@ -3,7 +3,7 @@ package de.fanta.secrets.guis;
 import de.fanta.secrets.SecretEntry;
 import de.fanta.secrets.Secrets;
 import de.fanta.secrets.utils.CustomHeadsUtil;
-import de.fanta.secrets.utils.guiutils.ItemUtil;
+import de.fanta.secrets.utils.ItemUtil;
 import de.iani.cubesideutils.bukkit.inventory.AbstractWindow;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
