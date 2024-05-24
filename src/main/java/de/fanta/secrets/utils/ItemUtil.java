@@ -1,8 +1,11 @@
 package de.fanta.secrets.utils;
 
+import de.iani.cubesideutils.bukkit.MinecraftVersion;
 import de.iani.cubesideutils.bukkit.items.ItemBuilder;
+import de.iani.cubesideutils.bukkit.plugin.CubesideUtilsBukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
@@ -18,8 +21,8 @@ public class ItemUtil {
         if (glowing) {
             builder.enchantment(Enchantment.MENDING, 1, true).flag(ItemFlag.HIDE_ENCHANTS);
         }
-        if (!showTooltip) {
-            builder.flag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        if (!showTooltip && MinecraftVersion.isAboveOrEqual(1, 20, 6)) {
+            builder.hideTooltip(true);
         }
         return builder.build();
 
