@@ -29,3 +29,6 @@ rewards:
   economyReward:
     enable: false
     amount: 100.0
+
+#Converter
+convert: false

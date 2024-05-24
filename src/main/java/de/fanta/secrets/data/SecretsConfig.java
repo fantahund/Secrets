@@ -18,6 +18,7 @@ public class SecretsConfig {
     private String commandRewardCommand;
     private boolean economyReward;
     private double economyRewardAmount;
+    private boolean convert;
 
     public SecretsConfig(Secrets plugin) {
         this.plugin = plugin;
@@ -39,6 +40,7 @@ public class SecretsConfig {
         commandRewardCommand = config.getString("rewards.commandReward.command");
         economyReward = config.getBoolean("rewards.economyReward.enable");
         economyRewardAmount = config.getDouble("rewards.economyReward.amount");
+        convert = config.getBoolean("convert");
     }
 
     public SQLConfig getSQLConfig() {
@@ -75,5 +77,9 @@ public class SecretsConfig {
 
     public double getEconomyRewardAmount() {
         return economyRewardAmount;
+    }
+
+    public boolean isConvertEnabled() {
+        return convert;
     }
 }

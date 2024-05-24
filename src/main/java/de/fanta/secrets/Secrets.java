@@ -110,6 +110,14 @@ public final class Secrets extends JavaPlugin {
 
         new bStats(this, config).registerbStats();
 
+        if (config.isConvertEnabled()) {
+            try {
+                new Converter(this).convert();
+            } catch (SQLException e) {
+                getLogger().log(Level.SEVERE, "OhOh fehler in the Converter D:", e);
+            }
+        }
+
         startUpdateTimer();
 
         loadSecretsfromDatabase();
